@@ -1,3 +1,3 @@
 plugins {
-    libs.plugins.kotlin.jvm
+    id("build-jvm")
 }
