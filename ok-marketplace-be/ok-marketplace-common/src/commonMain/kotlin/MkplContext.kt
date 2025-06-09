@@ -16,6 +16,7 @@ data class MkplContext(
     var state: MkplState = MkplState.NONE,
     val errors: MutableList<MkplError> = mutableListOf(),
 
+    var corSettings: MkplCorSettings = MkplCorSettings(),
     var workMode: MkplWorkMode = MkplWorkMode.PROD,
     var stubCase: MkplStubs = MkplStubs.NONE,
     var wsSession: IMkplWsSession = IMkplWsSession.NONE,
