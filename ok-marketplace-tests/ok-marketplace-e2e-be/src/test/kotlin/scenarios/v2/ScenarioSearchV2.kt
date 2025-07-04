@@ -21,12 +21,12 @@ abstract class ScenarioSearchV2(
             someCreateAd.copy(title = "Selling Bolt"),
             someCreateAd.copy(title = "Selling Nut"),
         ).map { obj ->
-            val resCreate = client.sendAndReceive(
+            val resCreate = client.sendAndReceive<AdCreateRequest,AdCreateResponse>(
                 "ad/create", AdCreateRequest(
                     debug = debug,
                     ad = obj,
                 )
-            ) as AdCreateResponse
+            )
 
             assertEquals(ResponseResult.SUCCESS, resCreate.result)
 
@@ -39,13 +39,13 @@ abstract class ScenarioSearchV2(
         }
 
         val sObj = AdSearchFilter(searchString = "Selling")
-        val resSearch = client.sendAndReceive(
+        val resSearch = client.sendAndReceive<AdSearchRequest,AdSearchResponse>(
             "ad/search",
             AdSearchRequest(
                 debug = debug,
                 adFilter = sObj,
             )
-        ) as AdSearchResponse
+        )
 
         assertEquals(ResponseResult.SUCCESS, resSearch.result)
 
@@ -55,12 +55,12 @@ abstract class ScenarioSearchV2(
         assertContains(titles, "Selling Nut")
 
         objs.forEach { obj ->
-            val resDelete = client.sendAndReceive(
+            val resDelete = client.sendAndReceive<AdDeleteRequest,AdDeleteResponse>(
                 "ad/delete", AdDeleteRequest(
                     debug = debug,
                     ad = AdDeleteObject(obj.id, obj.lock),
                 )
-            ) as AdDeleteResponse
+            )
 
             assertEquals(ResponseResult.SUCCESS, resDelete.result)
         }

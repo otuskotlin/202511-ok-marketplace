@@ -16,12 +16,12 @@ abstract class ScenarioReadV2(
     @Test
     fun read() = runBlocking {
         val obj = someCreateAd
-        val resCreate = client.sendAndReceive(
+        val resCreate = client.sendAndReceive<AdCreateRequest,AdCreateResponse>(
             "ad/create", AdCreateRequest(
                 debug = debug,
                 ad = obj,
             )
-        ) as AdCreateResponse
+        )
 
         assertEquals(ResponseResult.SUCCESS, resCreate.result)
 
@@ -34,13 +34,13 @@ abstract class ScenarioReadV2(
         val rObj = AdReadObject(
             id = cObj.id,
         )
-        val resRead = client.sendAndReceive(
+        val resRead = client.sendAndReceive<AdReadRequest,AdReadResponse>(
             "ad/read",
             AdReadRequest(
                 debug = debug,
                 ad = rObj,
             )
-        ) as AdReadResponse
+        )
 
         assertEquals(ResponseResult.SUCCESS, resRead.result)
 
@@ -50,12 +50,12 @@ abstract class ScenarioReadV2(
         assertEquals(obj.visibility, rrObj.visibility)
         assertEquals(obj.adType, rrObj.adType)
 
-        val resDelete = client.sendAndReceive(
+        val resDelete = client.sendAndReceive<AdDeleteRequest,AdDeleteResponse>(
             "ad/delete", AdDeleteRequest(
                 debug = debug,
                 ad = AdDeleteObject(cObj.id, cObj.lock),
             )
-        ) as AdDeleteResponse
+        )
 
         assertEquals(ResponseResult.SUCCESS, resDelete.result)
 

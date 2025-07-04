@@ -16,7 +16,7 @@ abstract class ScenarioOffersV1(
     private val debug: AdDebug? = null
 ) {
     @Test
-    fun search() = runBlocking {
+    fun offers() = runBlocking {
         val objs = listOf(
             someCreateAd,
             someCreateAd.copy(title = "Some Bolt", adType = DealSide.SUPPLY),
@@ -57,8 +57,7 @@ abstract class ScenarioOffersV1(
         println(rsObj)
         assertTrue { rsObj.map { it.adType }.all { it == oDemand.adType } }
         val titles = rsObj.map { it.title }
-        assertContains(titles, "Selling Bolt")
-        assertContains(titles, "Selling Nut")
+        assertContains(titles, "Some Bolt")
 
         objs.forEach { obj ->
             val resDelete = client.sendAndReceive(

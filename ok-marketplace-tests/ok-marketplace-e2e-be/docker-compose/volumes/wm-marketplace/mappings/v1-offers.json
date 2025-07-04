@@ -18,14 +18,14 @@
       "ads": [
         {
           "id": "123",
-          "title": "Selling Bolt",
+          "title": "Some Bolt",
           "description": "Требуется болт 100x5 с шестигранной шляпкой",
           "adType": "demand",
           "visibility": "public"
         },
         {
           "id": "124",
-          "title": "Selling Nut",
+          "title": "Some Nut",
           "description": "Требуется болт 100x5 с шестигранной шляпкой",
           "adType": "demand",
           "visibility": "public"
