@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  psql:
+    image: postgres
+#    ports:
+#      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "marketplace-pass"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "marketplace_ads"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  liquibase:
+    image: "ok-marketplace-migration-pg:0.1.0"
+    environment:
+      LIQUIBASE_URL:
+      LIQUIBASE_COMMAND_URL: jdbc:postgresql://psql:5432/marketplace_ads
+      LIQUIBASE_COMMAND_USERNAME: postgres
+      LIQUIBASE_COMMAND_PASSWORD: "marketplace-pass"
+      LIQUIBASE_LIQUIBASE_SCHEMA_NAME: public
+#      tableName: marketplace_ads
+
+    depends_on:
+      psql:
+        condition: service_healthy
