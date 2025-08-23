@@ -6,11 +6,12 @@ pluginManagement {
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
-rootProject.name = "ok-marketplace-202511"
+rootProject.name = "ok-marketplace-202505"
 
 //includeBuild("lessons")
-includeBuild("ok-marketplace-other")
 includeBuild("ok-marketplace-be")
+includeBuild("ok-marketplace-libs")
+
 includeBuild("ok-marketplace-tests")
