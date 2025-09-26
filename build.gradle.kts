@@ -25,20 +25,18 @@ tasks {
             dependsOn(it.task(":clean"))
         }
     }
-    register("buildInfra") { ->
-        dependsOn(
-            gradle.includedBuild("ok-marketplace-other").task(":buildInfra")
-        )
+    val buildMigrations: Task by creating {
+        dependsOn(gradle.includedBuild("ok-marketplace-other").task(":buildInfra"))
     }
 
-    register("buildImages") {
+    val buildImages: Task by creating {
+        dependsOn(buildMigrations)
         dependsOn(gradle.includedBuild("ok-marketplace-be").task(":buildImages"))
     }
-
-    register("e2eTests") { ->
-        dependsOn(
-            gradle.includedBuild("ok-marketplace-tests").task(":e2eTests")
-        )
+    val e2eTests: Task by creating {
+        dependsOn(buildImages)
+        dependsOn(gradle.includedBuild("ok-marketplace-tests").task(":e2eTests"))
+        mustRunAfter(buildImages)
     }
 
     register("check") {

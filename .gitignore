@@ -7,5 +7,7 @@ build/
 
 /.idea/
 /.gigaide/
+
+**/*.log
 **/*.hprof
 *.iml

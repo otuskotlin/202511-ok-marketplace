@@ -1,6 +1,5 @@
 plugins {
-    id("build-jvm")
-    id("maven-publish")
+    id("build-docker") apply false
 }
 
 //group = "ru.otus.otuskotlin.marketplace.tests"
@@ -28,5 +27,7 @@ tasks {
     register("buildInfra") {
         group = "build"
         dependsOn(project(":ok-marketplace-dcompose").getTasksByName("publish",false))
+        dependsOn(project(":ok-marketplace-migration-cs").getTasksByName("buildImage",false))
+        dependsOn(project(":ok-marketplace-migration-pg").getTasksByName("buildImage",false))
     }
 }
