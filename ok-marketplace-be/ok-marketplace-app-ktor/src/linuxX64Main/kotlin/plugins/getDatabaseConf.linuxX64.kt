@@ -15,7 +15,7 @@ actual fun Application.getDatabaseConf(type: AdDbType): IRepoAd {
         "postgres", "postgresql", "pg", "sql", "psql" -> initPostgres()
         else -> throw IllegalArgumentException(
             "$dbSettingPath must be set in application.yml to one of: " +
-                    "'inmemory'"
+                    "'inmemory', 'postgres'"
         )
     }
 }
