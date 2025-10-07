@@ -9,6 +9,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import ru.otus.otuskotlin.marketplace.common.helpers.asMkplError
 import ru.otus.otuskotlin.marketplace.common.models.*
 import ru.otus.otuskotlin.marketplace.common.repo.*
+import ru.otus.otuskotlin.marketplace.common.repo.errorNotFound
 import ru.otus.otuskotlin.marketplace.repo.common.IRepoAdInitializable
 
 class RepoAdSql(
@@ -33,7 +34,7 @@ class RepoAdSql(
     private fun saveObj(ad: MkplAd): MkplAd = transaction(conn) {
         val res = adTable
             .insert {
-                to(it, ad, randomUuid)
+                it.to(ad, randomUuid)
             }
             .resultedValues
             ?.map { adTable.from(it) }
@@ -89,10 +90,11 @@ class RepoAdSql(
 
 
     override suspend fun updateAd(rq: DbAdRequest): IDbAdResponse = update(rq.ad.id, rq.ad.lock) {
-        adTable.update({ adTable.id eq rq.ad.id.asString() }) {
-            to(it, rq.ad.copy(lock = MkplAdLock(randomUuid())), randomUuid)
-        }
-        read(rq.ad.id)
+        adTable.updateReturning(where = { adTable.id eq rq.ad.id.asString() }) {
+            it.to(rq.ad.copy(lock = MkplAdLock(randomUuid())), randomUuid)
+        }.singleOrNull()
+            ?.let { DbAdResponseOk(adTable.from(it)) }
+            ?: errorNotFound(rq.ad.id)
     }
 
     override suspend fun deleteAd(rq: DbAdIdRequest): IDbAdResponse = update(rq.id, rq.lock) {

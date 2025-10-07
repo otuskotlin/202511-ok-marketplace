@@ -18,26 +18,25 @@ class AdTable(tableName: String) : Table(tableName) {
     override val primaryKey = PrimaryKey(id)
 
     fun from(res: ResultRow) = MkplAd(
-        id = MkplAdId(res[id].toString()),
+        id = MkplAdId(res[id]),
         title = res[title] ?: "",
         description = res[description] ?: "",
-        ownerId = MkplUserId(res[owner].toString()),
+        ownerId = MkplUserId(res[owner]),
         visibility = res[visibility],
         adType = res[dealSide],
         lock = MkplAdLock(res[lock]),
         productId = res[productId]?.let { MkplProductId(it) } ?: MkplProductId.NONE,
     )
 
-    fun to(it: UpdateBuilder<*>, ad: MkplAd, randomUuid: () -> String) {
-        it[id] = ad.id.takeIf { it != MkplAdId.NONE }?.asString() ?: randomUuid()
-        it[title] = ad.title
-        it[description] = ad.description
-        it[owner] = ad.ownerId.asString()
-        it[visibility] = ad.visibility
-        it[dealSide] = ad.adType
-        it[lock] = ad.lock.takeIf { it != MkplAdLock.NONE }?.asString() ?: randomUuid()
-        it[productId] = ad.productId.takeIf { it != MkplProductId.NONE }?.asString()
+    fun UpdateBuilder<*>.to(ad: MkplAd, randomUuid: () -> String) {
+        this[id] = ad.id.takeIf { it != MkplAdId.NONE }?.asString() ?: randomUuid()
+        this[title] = ad.title
+        this[description] = ad.description
+        this[owner] = ad.ownerId.asString()
+        this[visibility] = ad.visibility
+        this[dealSide] = ad.adType
+        this[lock] = ad.lock.takeIf { it != MkplAdLock.NONE }?.asString() ?: randomUuid()
+        this[productId] = ad.productId.takeIf { it != MkplProductId.NONE }?.asString()
     }
-
 }
 
