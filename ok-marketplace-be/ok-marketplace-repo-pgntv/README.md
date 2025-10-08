@@ -17,3 +17,23 @@ git submodule update --init --recursive
 ```bash
 sudo apt install libpq-dev  
 ```
+
+## Github actions
+```yaml
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Добавить эти опции
+          submodules: recursive
+          token: ${{ secrets.PAT_TOKEN }}
+```
+
+## PAT_TOKEN
+Чтоб PAT_TOKEN появился, нужно перейти в:
+
+You accound -> Settings -> Develop Settings -> Personal Access Tokens -> Tokens (classic).
+
+Здесь нужно добавить токен с доступом к репозиторию, actions и workflow.
+
+При сохранении токена нужно скопировать токен и сохранить его в Project -> Settings -> Secrets -> Actions
+в переменной PAT_TOKEN
