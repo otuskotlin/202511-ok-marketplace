@@ -1,0 +1,13 @@
+services:
+  dashboards-base:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards-base
+    ports:
+      - 5601:5601
+    expose:
+      - "5601"
+    environment:
+      OPENSEARCH_HOSTS: '["https://${OPENSEARCH_HOST}:9200"]'
+    depends_on:
+      opensearch:
+        condition: service_healthy

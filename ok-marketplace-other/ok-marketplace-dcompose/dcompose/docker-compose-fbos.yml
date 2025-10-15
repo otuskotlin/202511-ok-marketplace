@@ -1,0 +1,33 @@
+# Минимальная версия инфраструктуры на базе
+# OpenSearch
+# OpenSearch Dashboards
+# Fluent Bit
+
+services:
+
+  app:
+    extends:
+      file: app-base.yml
+      service: app-base
+    depends_on:
+      - fluent-bit
+
+  #Logstash: 2GB RAM 400MB Docker
+  #fluent-bit: 30MB Docker 30MB RAM
+  fluent-bit:
+    extends:
+      file: fluent-bit-base.yml
+      service: fluent-bit-base
+
+  opensearch:
+    extends:
+      file: open-search-base.yml
+      service: opensearch-base
+
+  dashboards:
+    extends:
+      file: dashboards-base.yml
+      service: dashboards-base
+
+volumes:
+  opensearch-data:

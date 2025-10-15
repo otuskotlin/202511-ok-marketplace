@@ -1,0 +1,50 @@
+# Минимальная версия инфраструктуры на базе
+# OpenSearch - хранилище логов и метрик
+# OpenSearch Dashboards - отрисовка логов
+# Fluent Bit - служба сбора логов
+# Envoy - прокси
+# Keycloak - сервер идентификации
+
+# Адреса:
+# Приложение доступно по http://localhost:8080 (envoy прокси)
+# Панели мониторинга http://localhost:5601 (opensearch dashboards, kibana)
+# Управление пользователями http://localhost:8080/admin (keycloak)
+services:
+
+  app:
+    extends:
+      file: app-base.yml
+      service: app-base
+    depends_on:
+      - fluent-bit
+      - envoy
+
+  #Logstash: 2GB RAM 400MB Docker
+  #fluent-bit: 30MB Docker 30MB RAM
+  fluent-bit:
+    extends:
+      file: fluent-bit-base.yml
+      service: fluent-bit-base
+
+  opensearch:
+    extends:
+      file: open-search-base.yml
+      service: opensearch-base
+
+  dashboards:
+    extends:
+      file: dashboards-base.yml
+      service: dashboards-base
+
+  envoy:
+    extends:
+      file: envoy-base.yml
+      service: envoy-base
+
+  keycloak:
+    extends:
+      file: keycloak-base.yml
+      service: keycloak-base
+
+volumes:
+  opensearch-data:

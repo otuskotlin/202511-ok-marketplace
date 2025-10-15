@@ -1,0 +1,58 @@
+# Кластерная версия инфраструктуры на базе
+# OpenSearch (2 узла)
+# OpenSearch Dashboards
+# Fluent Bit
+
+services:
+
+  app:
+    extends:
+      file: app-base.yml
+      service: app-base
+    depends_on:
+      - fluent-bit
+
+  fluent-bit:
+    extends:
+      file: fluent-bit-base.yml
+      service: fluent-bit-base
+
+  opensearch:
+    extends:
+      file: open-search-base.yml
+      service: opensearch-cluster-base
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch # Name the node that will run in this container
+      - discovery.seed_hosts=opensearch,opensearch2 # Nodes to look for when discovering the cluster
+      - cluster.initial_cluster_manager_nodes=opensearch,opensearch2 # Nodes eligible to serve as cluster manager
+    ports:
+      - '9200:9200'
+      - '9600:9600'
+    volumes:
+      - opensearch-data1:/usr/share/opensearch/data
+
+  opensearch2:
+    extends:
+      file: open-search-base.yml
+      service: opensearch-cluster-base
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch # Name the node that will run in this container
+      - discovery.seed_hosts=opensearch,opensearch2 # Nodes to look for when discovering the cluster
+      - cluster.initial_cluster_manager_nodes=opensearch,opensearch2 # Nodes eligible to serve as cluster manager
+    volumes:
+      - opensearch-data2:/usr/share/opensearch/data
+
+  dashboards:
+    extends:
+      file: dashboards-base.yml
+      service: dashboards-base
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch:9200","https://opensearch2:9200"]'
+    depends_on:
+      - opensearch
+
+volumes:
+  opensearch-data1:
+  opensearch-data2:

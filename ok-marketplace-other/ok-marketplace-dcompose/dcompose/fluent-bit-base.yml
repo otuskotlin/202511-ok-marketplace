@@ -1,0 +1,18 @@
+services:
+  fluent-bit-base:
+    #    Logstash: 2GB RAM 400MB Docker
+    #    fluent-bit: 30MB Docker 30MB RAM
+    container_name: fluent-bit-base
+    image: fluent/fluent-bit
+    ports:
+      # необходимо открыть порты, которые используются плагином forward
+      - "24224:24224"
+      - "24224:24224/udp"
+      - "2020:2020"
+    environment:
+      - opensearch_host=${OPENSEARCH_HOST}
+      - opensearch_user=${OPENSEARCH_USER}
+      - opensearch_pass=${OPENSEARCH_PASS}
+    volumes:
+      - ./volumes/fluent-bit-etc/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./volumes/fluent-bit-etc/parsers.conf:/fluent-bit/etc/parsers.conf

@@ -1,0 +1,43 @@
+services:
+  opensearch-image:
+    image: opensearchproject/opensearch:latest
+    environment:
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_PASS}
+
+  opensearch-base:
+    extends:
+      service:  opensearch-image
+#    container_name: opensearch-base
+#    image: opensearchproject/opensearch:latest
+    environment:
+      - discovery.type=single-node
+      - http.port=9200
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+#      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=adm-Password0
+#      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_PASS}
+    ports:
+      - '9200:9200'
+      - '9600:9600'
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -ku admin:${OPENSEARCH_PASS} https://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    #    volumes:
+    #      - opensearch-data:/usr/share/opensearch/data
+
+  opensearch-cluster-base:
+    extends:
+      service: opensearch-image
