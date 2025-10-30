@@ -59,8 +59,23 @@ jobs:
       - name: Run Tests
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-version: 8.10.1
+          gradle-version: 9.2.1
           arguments: check -i
+      - name: Run Tests
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 9.2.1
+          arguments: buildInfra --info
+#        - name: Run Tests
+#          uses: gradle/gradle-build-action@v2
+#          with:
+#            gradle-version: 8.14.1
+#            arguments: buildImages --info
+      - name: Run Tests
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 9.2.1
+          arguments: e2eTests --info
 
       - name: Save Primes
         id: cache-primes-save

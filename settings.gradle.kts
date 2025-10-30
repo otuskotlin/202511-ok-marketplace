@@ -13,3 +13,4 @@ rootProject.name = "ok-marketplace-202511"
 //includeBuild("lessons")
 includeBuild("ok-marketplace-other")
 includeBuild("ok-marketplace-be")
+includeBuild("ok-marketplace-tests")
