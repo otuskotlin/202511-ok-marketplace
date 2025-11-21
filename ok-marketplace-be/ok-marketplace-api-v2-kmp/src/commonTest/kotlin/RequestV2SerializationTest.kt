@@ -11,6 +11,7 @@ import ru.otus.otuskotlin.marketplace.api.v2.models.IRequest
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlinx.serialization.encodeToString
 
 class RequestV2SerializationTest {
     private val request: IRequest = AdCreateRequest(
