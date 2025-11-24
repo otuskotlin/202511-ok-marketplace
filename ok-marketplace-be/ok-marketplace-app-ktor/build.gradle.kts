@@ -60,6 +60,8 @@ kotlin {
 
                 // Stubs
                 implementation(project(":ok-marketplace-stubs"))
+                // RabbitMQ
+//                implementation(project(":ok-marketplace-app-rabbit"))
 
                 implementation(libs.kotlinx.serialization.core)
                 implementation(libs.kotlinx.serialization.json)
