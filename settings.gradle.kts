@@ -1,5 +1,14 @@
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+pluginManagement {
+    plugins {
+        val kotlinVersion: String by settings
+        kotlin("jvm") version kotlinVersion
+    }
 }
-rootProject.name = "otuskotlin-marketplace-202312"
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+}
+rootProject.name = "otuskotlin-marketplace-202511"
+
+include("m1l1-first")
 
