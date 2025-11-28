@@ -6,9 +6,9 @@ pluginManagement {
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
-rootProject.name = "otuskotlin-marketplace-202508"
+rootProject.name = "otuskotlin-marketplace-202511"
 
 include("m1l1-first")
 
