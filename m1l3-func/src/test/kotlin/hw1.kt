@@ -104,21 +104,21 @@ class AnalyticsTest {
     @Test
     @Disabled("Implement function first")
     fun `clientsToSpentSumDesc should sort clients by total spending desc`() {
-        val expected = linkedMapOf(
+        val expected = listOf(
             ethan to (1800 + 250 + 150),          // 2200
             bob to (1200 + 3 + 15 + 12),          // 1230
             alice to (900 + 25 + 300),            // 1225
             charlie to (280 + 70),                // 350
             diana to (120 + 130),                 // 250
             helen to (20 + 35),                   // 55
-            fiona to (5 + 4),                     // 9
             george to 50,                          // 50
             ivan to 18,                            // 18
+            fiona to (5 + 4),                     // 9
             jake to 0,                             // 0
             karen to 0                             // 0
         )
 
-        assertEquals(expected, analytics.clientsToSpentSumDesc())
+        assertEquals(expected, analytics.clientsToSpentSumDesc().map { it.key to it.value })
     }
 
     @Test
