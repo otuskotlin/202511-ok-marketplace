@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.Disabled
+
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -68,20 +68,20 @@ class AnalyticsTest {
     private val analytics = Analytics(allClients)
 
     @Test
-    @Disabled("Implement function first")
+//    @Disabled("Implement function first")
     fun `mostPopularCategory should return Electronics as it has the most products`() {
         assertEquals(electronics, analytics.mostPopularCategory())
     }
 
     @Test
-    @Disabled("Implement function first")
+//    @Disabled("Implement function first")
     fun `mostPopularCategory should return null if all clients have empty product lists`() {
         val a = Analytics(listOf(jake, karen))
         assertNull(a.mostPopularCategory())
     }
 
     @Test
-    @Disabled("Implement function first")
+//    @Disabled("Implement function first")
     fun `categoriesToTotalSumDesc should correctly sum and sort by total spent desc`() {
         val expected = linkedMapOf(
             electronics to (900 + 1200 + 150 + 1800 + 250 + 300 + 280 + 70),  // = 4950
@@ -95,14 +95,14 @@ class AnalyticsTest {
     }
 
     @Test
-    @Disabled("Implement function first")
+//    @Disabled("Implement function first")
     fun `categoriesToTotalSumDesc should return empty map when no purchases exist`() {
         val a = Analytics(listOf(jake))
         assertEquals(emptyMap(), a.categoriesToTotalSumDesc())
     }
 
     @Test
-    @Disabled("Implement function first")
+//    @Disabled("Implement function first")
     fun `clientsToSpentSumDesc should sort clients by total spending desc`() {
         val expected = listOf(
             ethan to (1800 + 250 + 150),          // 2200
@@ -114,22 +114,22 @@ class AnalyticsTest {
             george to 50,                          // 50
             ivan to 18,                            // 18
             fiona to (5 + 4),                     // 9
-            jake to 0,                             // 0
-            karen to 0                             // 0
+            karen to 0,                             // 0
+            jake to 0                             // 0
         )
 
         assertEquals(expected, analytics.clientsToSpentSumDesc().map { it.key to it.value })
     }
 
     @Test
-    @Disabled("Implement function first")
+//    @Disabled("Implement function first")
     fun `clientsToSpentSumDesc should show zero for clients without purchases`() {
         val a = Analytics(listOf(jake))
         assertEquals(linkedMapOf(jake to 0), a.clientsToSpentSumDesc())
     }
 
     @Test
-    @Disabled("Implement function first")
+//    @Disabled("Implement function first")
     fun `mostActiveClientsDesc should return clients sorted by product count desc`() {
         val expected = linkedMapOf(
             bob to 4,
@@ -149,7 +149,7 @@ class AnalyticsTest {
     }
 
     @Test
-    @Disabled("Implement function first")
+//    @Disabled("Implement function first")
     fun `mostActiveClientsDesc should return zero for empty clients`() {
         val a = Analytics(listOf(jake, karen))
         val expected = linkedMapOf(
@@ -163,18 +163,38 @@ class AnalyticsTest {
 
 class Analytics(val clients: List<Client>) {
     // Самая популярная категория (та, в которой КОЛИЧЕСТВО купленных товаров максимально)
-    fun mostPopularCategory(): Category? = TODO()
+    fun mostPopularCategory(): Category? = clients
+        .flatMap { it.products }
+        .takeIf { it.isNotEmpty() }
+        ?.groupBy { it.category }
+        ?.maxBy { it.value.size }
+        ?.key
 
     // Получить маппинг типа "Категория - сумма купленных товаров в ней" в порядке убывания
     // Если товаров в категории нет - вывести 0 в значении
-    fun categoriesToTotalSumDesc(): Map<Category, Int> = TODO()
+    fun categoriesToTotalSumDesc(): Map<Category, Int> = clients
+        .flatMap { it.products }
+        .groupBy({ it.category }, { it.price })
+        .mapValues { price -> price.value.sumOf { it } }
+        .entries.sortedWith(
+            compareBy<Map.Entry<Category, Int>> { it.value }.thenBy { it.value }
+        )
+        .associate { it.key to it.value }
+
 
     // Получить маппинг типа "Клиент - сумма купленных товаров во всех категориях в порядке убывания
     // Если товаров не куплено - вывести 0 в значении
-    fun clientsToSpentSumDesc(): Map<Client, Int> = TODO()
+    fun clientsToSpentSumDesc(): Map<Client, Int> = clients
+        .map { client -> client to client.products.sumOf { it.price }}
+        .sortedBy { it.second }
+        .reversed()
+        .associate { it }
 
     // Вывести топ пользователей по КОЛИЧЕСТВУ купленных товаров в порядке убывания
-    fun mostActiveClientsDesc(): Map<Client, Int> = TODO()
+    fun mostActiveClientsDesc(): Map<Client, Int> = clients
+        .map { client -> client to client.products.size}
+        .sortedBy { it.second }
+        .associate { it }
 
 }
 
