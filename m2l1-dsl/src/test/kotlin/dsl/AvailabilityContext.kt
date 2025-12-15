@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.m2l1.dsl
+package dsl
 
 import java.time.DayOfWeek
 import java.time.LocalDate

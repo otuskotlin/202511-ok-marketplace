@@ -1,10 +1,10 @@
 package ru.otus.otuskotlin.m2l1
 
-import ru.otus.otuskotlin.m2l1.dsl.Action
-import ru.otus.otuskotlin.m2l1.dsl.buildUser
-import ru.otus.otuskotlin.m2l1.dsl.fri
-import ru.otus.otuskotlin.m2l1.dsl.mon
-import ru.otus.otuskotlin.m2l1.dsl.tomorrow
+import dsl.Action
+import dsl.buildUser
+import dsl.fri
+import dsl.mon
+import dsl.tomorrow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

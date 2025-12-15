@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.m2l1.dsl
+package dsl
 
 @DslMarker
 annotation class UserDsl

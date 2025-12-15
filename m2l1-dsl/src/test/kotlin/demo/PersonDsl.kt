@@ -1,5 +1,7 @@
 package ru.otus.otuskotlin.m2l1.demo
 
+import kotlin.test.Test
+
 @DslMarker
 annotation class PersonDsl
 
@@ -28,17 +30,21 @@ fun Person.contacts(block: Contacts.() -> Unit) {
     this.contacts.apply(block)
 }
 
-fun main() {
+class PersonDslExample {
 
-    val p = person {
-        id = 1L
-        name = "John"
-        age = 25
-        contacts {
-            email = "john@example.com"
-            phone = "1234"
+    @Test
+    fun `person DSL example`() {
+
+        val p = person {
+            id = 1L
+            name = "John"
+            age = 25
+            contacts {
+                email = "john@example.com"
+                phone = "1234"
+            }
         }
-    }
 
-    println(p)
+        println(p)
+    }
 }

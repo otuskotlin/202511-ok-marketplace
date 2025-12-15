@@ -1,7 +1,8 @@
-package ru.otus.otuskotlin.m2l1.dsl
+package dsl
 
 import java.util.UUID
 
+@UserDsl
 class UserBuilder {
 
     private var id: String = UUID.randomUUID().toString()
@@ -11,22 +12,19 @@ class UserBuilder {
     private var actionContext: ActionsContext = ActionsContext()
     private var availabilityContext: AvailabilityContext = AvailabilityContext()
 
-    @UserDsl
+
     fun name(block: NameContext.() -> Unit) {
         nameContext.apply(block)
     }
 
-    @UserDsl
     fun contacts(block: ContactsContext.() -> Unit) {
         contactContext.apply(block)
     }
 
-    @UserDsl
     fun actions(block: ActionsContext.() -> Unit) {
         actionContext.apply(block)
     }
 
-    @UserDsl
     fun availability(block: AvailabilityContext.() -> Unit) {
         availabilityContext.apply(block)
     }
