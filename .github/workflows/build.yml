@@ -25,11 +25,15 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     #    runs-on: macos-latest
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - uses: actions/checkout@v4
-      #        with:
-      #          submodules: recursive
-      #          token: ${{ secrets.PAT_TOKEN }}
+        with:
+          submodules: recursive
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Restore cached Primes
         id: cache-primes-restore
@@ -60,7 +64,17 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: 8.14.1
-          arguments: buildImages e2eTests
+          arguments: buildMigrations --info
+      - name: Run Tests
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 8.14.1
+          arguments: buildImages --info
+      - name: Run Tests
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 8.14.1
+          arguments: e2eTests --info
 
       - name: Save Primes
         id: cache-primes-save
