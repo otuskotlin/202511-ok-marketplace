@@ -2,9 +2,9 @@ package ru.otus.otuskotlin.markeplace.app.spring.stub
 
 import org.assertj.core.api.Assertions.assertThat
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.boot.webflux.test.autoconfigure.WebFluxTest
 import org.springframework.http.MediaType
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
 import ru.otus.otuskotlin.markeplace.app.spring.config.AdConfig
@@ -22,7 +22,7 @@ internal class AdControllerV2Test {
     private lateinit var webClient: WebTestClient
 
     @Suppress("unused")
-    @MockBean
+    @MockitoBean
     private lateinit var processor: MkplAdProcessor
 
     @Test
