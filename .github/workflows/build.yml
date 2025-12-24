@@ -23,13 +23,13 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     #    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      #        with:
-      #          submodules: recursive
-      #          token: ${{ secrets.PAT_TOKEN }}
+        with:
+          submodules: recursive
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Restore cached Primes
         id: cache-primes-restore
