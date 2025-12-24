@@ -28,5 +28,7 @@ tasks {
     register("buildInfra") {
         group = "build"
         dependsOn(project(":ok-marketplace-dcompose").getTasksByName("publish",false))
+        dependsOn(project(":ok-marketplace-migration-cs").getTasksByName("buildImages",false))
+        dependsOn(project(":ok-marketplace-migration-pg").getTasksByName("buildImages",false))
     }
 }
