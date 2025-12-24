@@ -60,19 +60,19 @@ jobs:
       #      - name: Install curl-dev
       #        run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libpq-dev libpq5
 
-      - name: Run Tests
+      - name: Build Migrations
         env:
           DOCKER_HOST: unix:///var/run/docker.sock
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: 8.14.1
           arguments: buildMigrations --info
-      - name: Run Tests
+      - name: Build Main Images
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: 8.14.1
           arguments: buildImages --info
-      - name: Run Tests
+      - name: Run E2E tests
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: 8.14.1
