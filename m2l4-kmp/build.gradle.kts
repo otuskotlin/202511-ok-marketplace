@@ -1,7 +1,5 @@
 plugins {
     kotlin("multiplatform")
-    // Только для lombok!!
-    java
 }
 
 repositories {
@@ -10,29 +8,29 @@ repositories {
 
 kotlin {
     jvm {
-        withJava()
+//        withJava()
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
         }
     }
 
-//    js {
-//        browser {
-//            testTask {
-//                useKarma {
-//                    // Выбираем браузеры, на которых будет тестироваться
-//                    useChrome()
-//                    useFirefox()
-//                }
-//                // Без этой настройки длительные тесты не отрабатывают
-//                useMocha {
-//                    timeout = "100s"
-//                }
-//            }
-//        }
-//    }
-    //linuxX64()
-    //macosArm64()
+    js {
+        browser {
+            testTask {
+                useKarma {
+                    // Выбираем браузеры, на которых будет тестироваться
+                    useChrome()
+                    useFirefox()
+                }
+                // Без этой настройки длительные тесты не отрабатывают
+                useMocha {
+                    timeout = "100s"
+                }
+            }
+        }
+    }
+//    linuxX64()
+//    macosArm64()
 
     val coroutinesVersion: String by project
     val datetimeVersion: String by project
@@ -62,27 +60,21 @@ kotlin {
             }
         }
         // dependencies from npm
-        //jsMain {
-        //    dependencies {
-        //        implementation(npm("js-big-decimal", "~1.3.4"))
-        //        implementation(npm("is-sorted", "~1.0.5"))
-        //    }
-        //}
-        //jsTest {
-        //    dependencies {
-        //        implementation(kotlin("test"))
-        //    }
-        //}
+//        jsMain {
+//            dependencies {
+//                implementation(npm("js-big-decimal", "~1.3.4"))
+//                implementation(npm("is-sorted", "~1.0.5"))
+//            }
+//        }
+//        jsTest {
+//            dependencies {
+//                implementation(kotlin("test"))
+//            }
+//        }
         // С 1.9.20 можно так
         //nativeMain {
         //}
         //nativeTest {
         //}
     }
-}
-
-// Только для lombock!!
-dependencies {
-    compileOnly("org.projectlombok:lombok:1.18.34")
-    annotationProcessor("org.projectlombok:lombok:1.18.34")
 }

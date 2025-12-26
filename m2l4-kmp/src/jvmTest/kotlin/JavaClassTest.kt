@@ -33,24 +33,4 @@ class JavaClassTest {
         assertNull(jcNull.value)
     }
 
-    /**
-     * Использование фреймворка lombok
-     */
-    @Test
-    fun lombokTest() {
-        val x = LombokExample.builder()
-            .str("str")
-            .i(12)
-            .j(null)
-            .build()
-        val y = LombokExample("str", 14, null)
-
-        assertEquals("str", x.str)
-        assertEquals("str", y.str)
-        assertEquals(12, x.i)
-        assertEquals(14, y.i)
-        assertNull(x.j)
-        assertNull(y.j)
-
-    }
 }
