@@ -21,6 +21,7 @@ spring-boot = "4.0.5"
 
 liquibase = "4.27.0"
 exposed = "0.50.0"
+cassandra = "4.17.0"
 
 # Docker
 muschko = "9.4.0"
@@ -44,10 +45,10 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "coroutines" }
 coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "coroutines" }
+coroutines-jdk9 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk9", version.ref = "coroutines" }
 cor = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-cor" }
 uuid = "com.benasher44:uuid:0.8.4"
 
-#jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jackson-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version = "3.1.1" }
 jackson-datatype = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
@@ -97,6 +98,10 @@ db-hikari = "com.zaxxer:HikariCP:5.1.0"
 db-exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 db-exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
 db-exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+db-cassandra-core = { module = "com.datastax.oss:java-driver-core", version.ref = "cassandra" }
+db-cassandra-qbuilder = { module = "com.datastax.oss:java-driver-query-builder", version.ref = "cassandra" }
+db-cassandra-kapt = { module = "com.datastax.oss:java-driver-mapper-processor", version.ref = "cassandra" }
+db-cassandra-mapper = { module = "com.datastax.oss:java-driver-mapper-runtime", version.ref = "cassandra" }
 
 # Liquidbase
 liquibase-core = {module = "org.liquibase:liquibase-core", version.ref = "liquibase"}
@@ -112,17 +117,17 @@ mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "5.2.
 testcontainers-core = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
 testcontainers-rabbitmq = { module = "org.testcontainers:testcontainers-rabbitmq", version.ref = "testcontainers" }
 testcontainers-postgres = { module = "org.testcontainers:testcontainers-postgresql", version.ref = "testcontainers" }
+testcontainers-cassandra = { module = "org.testcontainers:testcontainers-cassandra", version.ref = "testcontainers" }
 
 mkpl-logs-common = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-common", version.ref = "mkpl" }
 mkpl-logs-kermit = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-kermit", version.ref = "mkpl" }
 mkpl-logs-logback = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-logback", version.ref = "mkpl" }
 mkpl-logs-socket = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-socket", version.ref = "mkpl" }
 mkpl-cor = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-cor", version.ref = "mkpl" }
-mkpl-state-common = { module = "ru.otus.otuskotlin.marketplace.state:ok-marketplace-states-common", version.ref = "mkpl" }
-mkpl-state-biz = { module = "ru.otus.otuskotlin.marketplace.state:ok-marketplace-states-biz", version.ref = "mkpl" }
 
 [bundles]
 exposed = ["db-exposed-core", "db-exposed-dao", "db-exposed-jdbc"]
+cassandra = ["db-cassandra-core", "db-cassandra-mapper", "db-cassandra-qbuilder"]
 #kotest = ["kotest-junit5", "kotest-core", "kotest-datatest", "kotest-property"]
 kotest = ["kotest-junit5", "kotest-core", "kotest-property"]
 
@@ -132,6 +137,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 openapi-generator = { id = "org.openapi.generator", version.ref = "openapi-generator" }
 crowdproj-generator = { id = "com.crowdproj.generator", version = "0.4.0" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 shadowJar = { id = "com.gradleup.shadow", version = "9.3.2" }
 liquibase = { id = "org.liquibase.gradle", version = "2.2.2" }
 

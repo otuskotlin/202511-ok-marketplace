@@ -25,6 +25,7 @@ abstract class RepoAdCreateTest {
         val expected = createObj
         assertIs<DbAdResponseOk>(result)
         assertEquals(uuidNew, result.data.id)
+        assertEquals(uuidNew.asString(), result.data.lock.asString())
         assertEquals(expected.title, result.data.title)
         assertEquals(expected.description, result.data.description)
         assertEquals(expected.adType, result.data.adType)

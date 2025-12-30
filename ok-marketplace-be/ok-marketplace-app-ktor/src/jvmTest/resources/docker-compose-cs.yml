@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+  cassandra:
+    image: cassandra:5.0.3
+    ports:
+      - "9042"
+    environment:
+      CASSANDRA_DC: "dc1"
+      CASSANDRA_ENDPOINT_SNITCH:  "GossipingPropertyFileSnitch"
+    healthcheck:
+     test: ["CMD-SHELL", "cqlsh -u cassandra -p cassandra -e 'SELECT key FROM system.local'"]
+     interval: 30s
+     timeout: 10s
+     retries: 10
+     start_period: 120s
+    volumes:
+      - ./cassandra.yaml:/opt/cassandra/conf/cassandra.yaml
+
+  cassandra-init:
+    image: cassandra:5.0.3
+    entrypoint: [ "/init.sh" ]
+    volumes:
+      - ./cassandra-init-data.sh:/init.sh
+    depends_on:
+      cassandra:
+        condition: service_healthy
+
+  liquibase:
+    image: "ok-marketplace-migration-cs:0.1.0"
+    environment:
+      LIQUIBASE_COMMAND_URL: jdbc:cassandra://cassandra:9042/marketplace?ssl=false&compliancemode=Liquibase&localdatacenter=dc1
+      LIQUIBASE_COMMAND_USERNAME: cassandra
+      LIQUIBASE_COMMAND_PASSWORD: cassandra
+      LIQUIBASE_LIQUIBASE_SCHEMA_NAME: marketplace
+    depends_on:
+      cassandra-init:
+        condition: service_completed_successfully
