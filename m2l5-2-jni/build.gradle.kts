@@ -1,3 +1,4 @@
+import org.gradle.internal.extensions.core.serviceOf
 import org.gradle.internal.jvm.Jvm
 import org.jetbrains.kotlin.gradle.targets.jvm.tasks.KotlinJvmTest
 import java.io.ByteArrayOutputStream
@@ -21,9 +22,9 @@ kotlin {
     //  common - common code that we can use on different platforms
     //  for each target platform, we can specify our own specific dependencies
     sourceSets {
-        val jvmMain by getting {
+        jvmMain {
         }
-        val jvmTest by getting {
+        jvmTest {
             dependencies {
                 implementation(kotlin("test"))
             }
@@ -56,6 +57,7 @@ tasks {
 
             val bodyExtractingRegex = """^.+\Rpublic \w* ?class ([^\s]+).*\{\R((?s:.+))\}\R$""".toRegex()
             val nativeMethodExtractingRegex = """.*\bnative\b.*""".toRegex()
+            val execOps = serviceOf<ExecOperations>()
 
             buildDir.walkTopDown()
                 .filter { "META" !in it.absolutePath }
@@ -63,7 +65,7 @@ tasks {
                     if (!file.isFile) return@forEach
 
                     val output = ByteArrayOutputStream().use { os ->
-                        exec {
+                        execOps.exec {
                             commandLine(javap, "-private", "-cp", buildDir.absolutePath, file.absolutePath)
                             standardOutput = os
                         }.assertNormalExitValue()
@@ -106,7 +108,7 @@ tasks {
                     val outputFile = tmpDir.resolve(packageName.replace(".", "/")).apply { mkdirs() }.resolve("$className.java").apply { delete() }.apply { createNewFile() }
                     outputFile.writeText(source)
 
-                    exec {
+                    execOps.exec {
                         commandLine(javac, "-h", jniHeaderDirectory.absolutePath, outputFile.absolutePath)
                     }.assertNormalExitValue()
                 }
