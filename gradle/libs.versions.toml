@@ -134,6 +134,9 @@ mkpl-logs-kermit = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplac
 mkpl-logs-logback = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-logback", version.ref = "mkpl" }
 mkpl-logs-socket = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-socket", version.ref = "mkpl" }
 mkpl-cor = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-cor", version.ref = "mkpl" }
+mkpl-state-common = { module = "ru.otus.otuskotlin.marketplace.state:ok-marketplace-states-common", version.ref = "mkpl" }
+mkpl-state-biz = { module = "ru.otus.otuskotlin.marketplace.state:ok-marketplace-states-biz", version.ref = "mkpl" }
+
 
 [bundles]
 exposed = ["db-exposed-core", "db-exposed-dao", "db-exposed-jdbc"]
