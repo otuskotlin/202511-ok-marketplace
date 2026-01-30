@@ -1,7 +1,3 @@
-import java.net.URL
-
-rootProject.name = "backend-build"
-
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
