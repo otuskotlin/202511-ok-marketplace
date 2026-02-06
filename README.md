@@ -56,5 +56,8 @@ Marketplace -- это площадка, на которой пользовате
 
 ### Транспортные модели, API
 
-
-
+1. [specs](specs) - описание API в форме OpenAPI-спецификаций
+2. [ok-marketplace-api-v1-jackson](ok-marketplace-be/ok-marketplace-api-v1-jackson) - Генерация первой версии
+   транспортных модеелй с Jackson
+3. [ok-marketplace-api-v2-kmp](ok-marketplace-be/ok-marketplace-api-v2-kmp) - Генерация второй версии транспортных
+   моделей с KMP
