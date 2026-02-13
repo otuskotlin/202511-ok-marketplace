@@ -25,6 +25,8 @@ Marketplace -- это площадка, на которой пользовате
     1. [ADR](docs/03-architecture/01-adrs.md)
     2. [Описание API](docs/03-architecture/02-api.md)
     3. [Архитектурные схемы](docs/03-architecture/03-arch.md)
+4. DevOps
+    1. [Файлы сборки](./deploy)
 
 # Структура проекта
 
@@ -43,6 +45,7 @@ Marketplace -- это площадка, на которой пользовате
    5. m2l5 - Интероперабельность Kotlin с другими языками
        1. [m2l5-1-interop](lessons/m2l5-1-interop) - Интероперабельность Kotlin Native с C
        2. [m2l5-2-jni](lessons/m2l5-2-jni) - Интероперабельность Kotlin JVM с C
+   6. [m4l3-testing](ok-marketplace-tests) - Тестирование проекта
 3. Модуль 3: Подготовка к разработке
 
 ### Плагины Gradle сборки проекта
