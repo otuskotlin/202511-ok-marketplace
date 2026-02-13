@@ -64,12 +64,3 @@ jobs:
 #          run gradle buildImages --info
       - name: Run E2E Tests
         run: e2eTests --info
-
-      - name: Save Primes
-        id: cache-primes-save
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            .gradle
-            .kotlin
-          key: ${{ steps.cache-primes-restore.outputs.cache-primary-key }}
