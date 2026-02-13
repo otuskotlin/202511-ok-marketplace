@@ -25,17 +25,16 @@ tasks {
             dependsOn(it.task(":clean"))
         }
     }
-    val buildInfra by registering { ->
+    register("buildInfra") { ->
         dependsOn(
             gradle.includedBuild("ok-marketplace-other").task(":buildInfra")
         )
     }
 
-//    val buildImages: Task by creating {
+//    register("buildImages") {
 //        dependsOn(gradle.includedBuild("ok-marketplace-be").task(":buildImages"))
-//        mustRunAfter(buildMigrations)
 //    }
-    val e2eTests by registering { ->
+    register("e2eTests") { ->
         dependsOn(
             gradle.includedBuild("ok-marketplace-tests").task(":e2eTests")
         )
@@ -44,7 +43,6 @@ tasks {
     register("check") {
         group = "verification"
         dependsOn(gradle.includedBuild("ok-marketplace-be").task(":check"))
-        dependsOn(e2eTests)
     }
 }
 

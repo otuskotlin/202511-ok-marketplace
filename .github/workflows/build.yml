@@ -63,4 +63,4 @@ jobs:
 #        - name: Build App Images
 #          run gradle buildImages --info
       - name: Run E2E Tests
-        run: e2eTests --info
+        run: gradle e2eTests --info
