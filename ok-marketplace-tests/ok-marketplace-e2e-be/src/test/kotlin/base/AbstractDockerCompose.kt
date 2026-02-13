@@ -38,6 +38,7 @@ abstract class AbstractDockerCompose(
 
     private val compose by lazy {
         ComposeContainer(getComposeFiles()).apply {
+            withLocalCompose(true)
             apps.forEach { (service, port) ->
                 withExposedService(service, port)
                 withLogConsumer(service, logConsumer)
