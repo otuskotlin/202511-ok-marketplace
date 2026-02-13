@@ -46,10 +46,8 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Setup Gradle 9.2.1
+      - name: Setup Gradle from Properties File
         uses: gradle/actions/setup-gradle@v5
-        with:
-          gradle-version: '9.2.1' # Quotes required to prevent YAML converting to number
 
 #      # https://github.com/actions/runner-images/issues/675
 #      - name: Hack sources.list
