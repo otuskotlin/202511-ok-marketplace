@@ -1,4 +1,4 @@
-rootProject.name = "ok-marketplace-libs"
+rootProject.name = "ok-marketplace-other"
 
 dependencyResolutionManagement {
     versionCatalogs {
