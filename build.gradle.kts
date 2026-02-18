@@ -25,11 +25,12 @@ tasks {
             dependsOn(it.task(":clean"))
         }
     }
-//    register("buildInfra") { ->
-//        dependsOn(
-//            gradle.includedBuild("ok-marketplace-other").task(":buildInfra")
-//        )
-//    }
+    register("buildInfra") { ->
+        //dependsOn(
+            group = "build"
+            //gradle.includedBuild("ok-marketplace-other").task(":buildInfra")
+        //)
+    }
 
 //    register("buildImages") {
 //        dependsOn(gradle.includedBuild("ok-marketplace-be").task(":buildImages"))
