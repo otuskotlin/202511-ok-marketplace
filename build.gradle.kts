@@ -25,7 +25,7 @@ tasks {
             dependsOn(it.task(":clean"))
         }
     }
-    register("buildInfra") { ->
+    register("buildInfra") { //->
         //dependsOn(
             group = "build"
             //gradle.includedBuild("ok-marketplace-other").task(":buildInfra")
