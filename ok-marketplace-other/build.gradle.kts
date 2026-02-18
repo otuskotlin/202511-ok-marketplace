@@ -3,8 +3,15 @@ plugins {
     id("maven-publish")
 }
 
-group = "ru.otus.otuskotlin.marketplace.tests"
-version = "0.1.0"
+//group = "ru.otus.otuskotlin.marketplace.tests"
+//version = "0.1.0"
+
+group = "ru.otus.otuskotlin.marketplace"
+version = "1.0"
+
+base {
+    archivesName.set("dcompose")
+}
 
 allprojects {
     repositories {

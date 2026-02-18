@@ -21,6 +21,7 @@ ext {
     val specDir = layout.projectDirectory.dir("../specs")
     set("spec-v1", specDir.file("specs-ad-v1.yaml").toString())
     set("spec-v2", specDir.file("specs-ad-v2.yaml").toString())
+    set("spec-log1", specDir.file("specs-ad-log1.yaml").toString())
 }
 
 tasks {

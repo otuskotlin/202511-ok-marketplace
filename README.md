@@ -1,4 +1,4 @@
-# 202502-ok-marketplace
+# 202511-ok-marketplace
 
 Учебный проект курса
 [Kotlin Backend Developer](https://otus.ru/lessons/kotlin/).
@@ -46,6 +46,7 @@ Marketplace -- это площадка, на которой пользовате
        1. [m2l5-1-interop](lessons/m2l5-1-interop) - Интероперабельность Kotlin Native с C
        2. [m2l5-2-jni](lessons/m2l5-2-jni) - Интероперабельность Kotlin JVM с C
    6. [m4l3-testing](ok-marketplace-tests) - Тестирование проекта
+   7. [m4l4-monitoring](ok-marketplace-libs) - Мониторинг, сбор логов и метрик
 3. Модуль 3: Подготовка к разработке
 
 ### Плагины Gradle сборки проекта
