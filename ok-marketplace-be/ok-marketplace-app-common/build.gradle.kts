@@ -8,10 +8,14 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
+                implementation(libs.coroutines.core)
 
                 // transport models
                 implementation(project(":ok-marketplace-common"))
                 implementation(project(":ok-marketplace-api-log1"))
+                implementation(project(":ok-marketplace-api-v2-kmp"))
+
+                implementation(project(":ok-marketplace-biz"))
             }
         }
         commonTest {
@@ -20,6 +24,7 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
 
                 implementation(libs.coroutines.core)
+                implementation(libs.coroutines.test)
             }
         }
 
