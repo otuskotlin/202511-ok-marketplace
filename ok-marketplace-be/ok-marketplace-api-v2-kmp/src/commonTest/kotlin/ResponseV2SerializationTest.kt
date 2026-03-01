@@ -8,6 +8,7 @@ import ru.otus.otuskotlin.marketplace.api.v2.models.IResponse
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlinx.serialization.encodeToString
 
 class ResponseV2SerializationTest {
     private val response: IResponse = AdCreateResponse(
