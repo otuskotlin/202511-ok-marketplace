@@ -43,7 +43,7 @@ private fun String?.toAdId() = this?.let { MkplAdId(it) } ?: MkplAdId.NONE
 private fun String?.toAdWithId() = MkplAd(id = this.toAdId())
 private fun String?.toAdLock() = this?.let { MkplAdLock(it) } ?: MkplAdLock.NONE
 
-private fun AdDebug?.transportToWorkMode(): MkplWorkMode = when (this?.mode) {
+private fun AdDebug?.transportToWorkMode(): MkplWorkMode =  when (this?.mode) {
     AdRequestDebugMode.PROD -> MkplWorkMode.PROD
     AdRequestDebugMode.TEST -> MkplWorkMode.TEST
     AdRequestDebugMode.STUB -> MkplWorkMode.STUB
