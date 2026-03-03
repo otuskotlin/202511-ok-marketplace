@@ -35,7 +35,7 @@ class MpLoggerWrapperKermit(
     }
 
     // TODO Нужно для data придумать сериализацию или трансформацию в map
-    private inline fun formatMessage(
+    private fun formatMessage(
         msg: String = "",
         data: Any? = null,
         objs: Map<String,Any>? = null

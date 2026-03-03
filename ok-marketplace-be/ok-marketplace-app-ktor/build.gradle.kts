@@ -1,3 +1,6 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import ru.otus.otuskotlin.marketplace.plugin.DockerBuildTask
 
 plugins {
@@ -27,7 +30,11 @@ docker {
 }
 
 kotlin {
-    jvm { }
+    jvm {
+        mainRun {
+            mainClass = "io.ktor.server.cio.EngineMain"
+        }
+    }
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries {
             executable {
@@ -123,6 +130,12 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
+    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+        manifest {
+            // Optionally, set the main class for the shadowed JAR.
+            attributes["Main-Class"] = "io.ktor.server.cio.EngineMain"
+        }
+    }
 }
 
 afterEvaluate {
@@ -132,8 +145,8 @@ afterEvaluate {
             group = "docker"
             doFirst {
                 copy {
-                    from("Dockerfile.jvm").rename { "Dockerfile" }
-                    from(shadowJar.get().outputs)
+                    from("Dockerfile.jvm") { rename { "Dockerfile" } }
+                    from(shadowJar.get().archiveFile.get())
                     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
                     println("BUILD CONTEXT: ${buildContext.get()}")
                     into(buildContext)
@@ -142,7 +155,7 @@ afterEvaluate {
         }
 
         named("dockerBuildLinuxX64", DockerBuildTask::class) {
-            dependsOn(linkLinuxX64)
+            dependsOn("linkReleaseExecutableLinuxX64")
             group = "docker"
             doFirst {
                 copy {
