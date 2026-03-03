@@ -1,31 +1,33 @@
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
-import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
-import com.bmuschko.gradle.docker.tasks.image.Dockerfile
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
+import ru.otus.otuskotlin.marketplace.plugin.DockerBuildTask
 
 plugins {
     alias(libs.plugins.kotlinx.serialization)
     id("build-kmp")
-    alias(libs.plugins.ktor)
-    alias(libs.plugins.muschko.remote)
+    alias(libs.plugins.shadowJar)
+    id("build-docker")
 }
 
-ktor {
-    docker {
-        localImageName.set(project.name)
-        imageTag.set(project.version.toString())
-        jreVersion.set(JavaVersion.VERSION_21)
+docker {
+    buildContext = "."
+    imageTag = "${project.version}"
+    
+    // JVM образ
+    images.register("Jvm") {
+        buildContext = project.layout.buildDirectory.dir("docker-jvm").get().toString()
+        dockerFile = "Dockerfile"
+        dependsOnTask = "jvmJar"
+    }
+    
+    // Native образ для Linux x64
+    images.register("LinuxX64") {
+        buildContext = project.layout.buildDirectory.dir("docker-linuxx64").get().toString()
+        dockerFile = "Dockerfile"
+        dependsOnTask = "linkReleaseExecutableLinuxX64"
     }
 }
 
-//jib {
-//    from.image = "eclipse-temurin:21-jre"
-//    container.mainClass = "io.ktor.server.cio.EngineMain"
-//}
-
 kotlin {
-    // !!! Обязательно. Иначе не проходит сборка толстых джанриков в shadowJar
-    jvm {  }
+    jvm { }
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries {
             executable {
@@ -47,10 +49,6 @@ kotlin {
                 implementation(libs.ktor.server.headers.caching)
                 implementation(libs.ktor.server.websocket)
 
-//                // Для того, чтоб получать содержимое запроса более одного раза
-//                В Application.main добавить `install(DoubleReceive)`
-//                implementation("io.ktor:ktor-server-double-receive:${libs.versions.ktor.get()}")
-
                 implementation(project(":ok-marketplace-common"))
                 implementation(project(":ok-marketplace-app-common"))
                 implementation(project(":ok-marketplace-biz"))
@@ -60,8 +58,6 @@ kotlin {
 
                 // Stubs
                 implementation(project(":ok-marketplace-stubs"))
-                // RabbitMQ
-//                implementation(project(":ok-marketplace-app-rabbit"))
 
                 implementation(libs.kotlinx.serialization.core)
                 implementation(libs.kotlinx.serialization.json)
@@ -69,9 +65,9 @@ kotlin {
 
                 // logging
                 implementation(project(":ok-marketplace-api-log1"))
-                implementation("ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-common")
-                implementation("ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-kermit")
-                implementation("ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-socket")
+                implementation(libs.mkpl.logs.common)
+                implementation(libs.mkpl.logs.kermit)
+                implementation(libs.mkpl.logs.socket)
             }
         }
 
@@ -81,6 +77,7 @@ kotlin {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
 
+                // DB
                 implementation(libs.ktor.server.test)
                 implementation(libs.ktor.client.negotiation)
             }
@@ -95,16 +92,14 @@ kotlin {
                 implementation(libs.ktor.server.calllogging)
                 implementation(libs.ktor.server.headers.default)
 
-                implementation(libs.ktor.server.tomcat.jakarta)
-
                 implementation(libs.logback)
 
                 // transport models
-                implementation(project(":ok-marketplace-api-v1-jackson"))
-                implementation(project(":ok-marketplace-api-v1-mappers"))
+                implementation(projects.okMarketplaceApiV1Jackson)
+                implementation(projects.okMarketplaceApiV1Mappers)
+                implementation(projects.okMarketplaceApiV2Kmp)
 
                 implementation("ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-logback")
-
             }
         }
 
@@ -113,63 +108,52 @@ kotlin {
                 implementation(kotlin("test-junit"))
             }
         }
+
+        linuxX64Main {
+            dependencies {
+            }
+        }
     }
 }
 
 tasks {
-    /*shadowJar {
-        isZip64 = true
-    }*/
-
     // Если ошибка: "Entry application.yaml is a duplicate but no duplicate handling strategy has been set."
     // Возникает из-за наличия файлов как в common, так и в jvm платформе
     withType(ProcessResources::class) {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
-    val linkReleaseExecutableLinuxX64 by getting(KotlinNativeLink::class)
-    val nativeFileX64 = linkReleaseExecutableLinuxX64.binary.outputFile
-    val linuxX64ProcessResources by getting(ProcessResources::class)
+}
 
-    val dockerDockerfileX64 by creating(Dockerfile::class) {
-        dependsOn(linkReleaseExecutableLinuxX64)
-        dependsOn(linuxX64ProcessResources)
-        group = "docker"
-        from(Dockerfile.From("ubuntu:22.04").withPlatform("linux/amd64"))
-        doFirst {
-            copy {
-                from(nativeFileX64)
-                from(linuxX64ProcessResources.destinationDir)
-                into("${this@creating.destDir.get()}")
+afterEvaluate {
+    tasks {
+        named("dockerBuildJvm", DockerBuildTask::class) {
+            dependsOn(shadowJar)
+            group = "docker"
+            doFirst {
+                copy {
+                    from("Dockerfile.jvm").rename { "Dockerfile" }
+                    from(shadowJar.get().outputs)
+                    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+                    println("BUILD CONTEXT: ${buildContext.get()}")
+                    into(buildContext)
+                }
             }
         }
-        copyFile(nativeFileX64.name, "/app/")
-        copyFile("application.yaml", "/app/")
-        exposePort(8080)
-        workingDir("/app")
-        entryPoint("/app/${nativeFileX64.name}", "-config=./application.yaml")
-    }
-    val registryUser: String? = System.getenv("CONTAINER_REGISTRY_USER")
-    val registryPass: String? = System.getenv("CONTAINER_REGISTRY_PASS")
-    val registryHost: String? = System.getenv("CONTAINER_REGISTRY_HOST")
-    val registryPref: String? = System.getenv("CONTAINER_REGISTRY_PREF")
-    val imageName = registryPref?.let { "$it/${project.name}" } ?: project.name
 
-    val dockerBuildX64Image by creating(DockerBuildImage::class) {
-        group = "docker"
-        dependsOn(dockerDockerfileX64)
-        images.add("$imageName-x64:${rootProject.version}")
-        images.add("$imageName-x64:latest")
-        platform.set("linux/amd64")
-    }
-    val dockerPushX64Image by creating(DockerPushImage::class) {
-        group = "docker"
-        dependsOn(dockerBuildX64Image)
-        images.set(dockerBuildX64Image.images)
-        registryCredentials {
-            username.set(registryUser)
-            password.set(registryPass)
-            url.set("https://$registryHost/v1/")
+        named("dockerBuildLinuxX64", DockerBuildTask::class) {
+            dependsOn(linkLinuxX64)
+            group = "docker"
+            doFirst {
+                copy {
+                    from("Dockerfile")
+                    from(getByName("linkReleaseExecutableLinuxX64").outputs)
+                    from(linuxX64ProcessResources.get().outputs)
+                    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+                    println("BUILD CONTEXT: ${buildContext.get()}")
+                    into(buildContext)
+                }
+            }
         }
     }
 }
