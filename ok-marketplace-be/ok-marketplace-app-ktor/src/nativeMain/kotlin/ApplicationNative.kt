@@ -6,21 +6,24 @@ import io.ktor.server.config.yaml.*
 import io.ktor.server.engine.*
 
 fun main() {
-    embeddedServer(CIO, environment = applicationEngineEnvironment {
-        val conf = YamlConfigLoader().load("./application.yaml")
-            ?: throw RuntimeException("Cannot read application.yaml")
-        println(conf)
+
+    val conf = YamlConfigLoader().load("./application.yaml")
+        ?: throw RuntimeException("Cannot read application.yaml")
+
+    val appEnv = applicationEnvironment {
         config = conf
-        println("File read")
+    }
 
-        module {
-            module()
+    embeddedServer(
+        factory = CIO,
+        environment = appEnv,
+        configure = {
+            this.connectors.add(EngineConnectorBuilder().apply {
+                host = conf.host
+                port = conf.port
+            })
         }
-
-        connector {
-            port = conf.port
-            host = conf.host
-        }
-        println("Starting")
-    }).start(true)
+    ) {
+        module()
+    }.start(true)
 }

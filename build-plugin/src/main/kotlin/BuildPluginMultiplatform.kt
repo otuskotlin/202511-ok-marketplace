@@ -23,7 +23,6 @@ internal class BuildPluginMultiplatform : Plugin<Project> {
                 configureTargets(this@with)
                 sourceSets.configureEach {
                     languageSettings.apply {
-                        languageVersion = "1.9"
                         progressiveMode = true
                         optIn("kotlin.time.ExperimentalTime")
                     }
