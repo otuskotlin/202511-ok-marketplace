@@ -13,14 +13,14 @@ plugins {
 docker {
     buildContext = "."
     imageTag = "${project.version}"
-    
+
     // JVM образ
     images.register("Jvm") {
         buildContext = project.layout.buildDirectory.dir("docker-jvm").get().toString()
         dockerFile = "Dockerfile"
         dependsOnTask = "jvmJar"
     }
-    
+
     // Native образ для Linux x64
     images.register("LinuxX64") {
         buildContext = project.layout.buildDirectory.dir("docker-linuxx64").get().toString()
