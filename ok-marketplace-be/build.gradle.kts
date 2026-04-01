@@ -47,8 +47,16 @@ tasks {
         }
     }
     register("buildImages") {
+
+        val isLinuxOS = listOf("linux").any { System.getProperty("os.name").lowercase().contains(it) }
+        logger.lifecycle("isLinuxOS: $isLinuxOS")
+
+
         dependsOn(project("ok-marketplace-app-spring").tasks.getByName("bootBuildImage"))
-        dependsOn(project("ok-marketplace-app-ktor").tasks.getByName("publishImageToLocalRegistry"))
-        dependsOn(project("ok-marketplace-app-ktor").tasks.getByName("dockerBuild"))
+        dependsOn(project("ok-marketplace-app-ktor").tasks.getByName("dockerBuildJvm"))
+        if (isLinuxOS) {
+            dependsOn(project("ok-marketplace-app-ktor").tasks.getByName("dockerBuildLinuxX64"))
+        }
+
     }
 }

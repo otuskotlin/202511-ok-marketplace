@@ -9,6 +9,7 @@ open class DockerExtension {
     var buildArgs: MapProperty<String, String>? = null
     var noCache = false
     var removeIntermediateContainers = false
+    var imageName = ""
 
     val images = DockerImagesExtension()
 }
