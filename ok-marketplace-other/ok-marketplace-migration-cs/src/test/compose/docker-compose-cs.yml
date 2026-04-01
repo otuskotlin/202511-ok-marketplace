@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  cassandra:
+    image: cassandra:5.0.3
+    environment:
+      CASSANDRA_DC: "dc1"
+      CASSANDRA_ENDPOINT_SNITCH:  "GossipingPropertyFileSnitch"
+    healthcheck:
+      test: ["CMD-SHELL", "[ $$(nodetool statusgossip) = running ]"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - ./cassandra.yaml:/opt/cassandra/conf/cassandra.yaml
+
+  cassandra-init:
+    image: cassandra:5.0.3
+    command: |
+      cqlsh cassandra -e "CREATE KEYSPACE IF NOT EXISTS marketplace WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'dc1' : 1 };"
+    depends_on:
+      cassandra:
+        condition: service_healthy
+
+  liquibase:
+    image: "ok-marketplace-migration-cs:0.1.0"
+    environment:
+      LIQUIBASE_COMMAND_URL: jdbc:cassandra://cassandra:9042/marketplace?ssl=false&compliancemode=Liquibase&localdatacenter=dc1
+      LIQUIBASE_COMMAND_USERNAME: cassandra
+      LIQUIBASE_COMMAND_PASSWORD: cassandra
+      LIQUIBASE_LIQUIBASE_SCHEMA_NAME: marketplace
+    depends_on:
+      cassandra-init:
+        condition: service_completed_successfully
