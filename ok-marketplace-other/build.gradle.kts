@@ -1,5 +1,6 @@
 plugins {
-    id("build-docker") apply false
+    id("build-jvm")
+    id("maven-publish")
 }
 
 //group = "ru.otus.otuskotlin.marketplace.tests"

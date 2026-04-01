@@ -48,7 +48,8 @@ tasks {
     }
     register("buildImages") {
         dependsOn(project("ok-marketplace-app-spring").tasks.getByName("bootBuildImage"))
-        dependsOn(project("ok-marketplace-app-ktor").tasks.getByName("publishImageToLocalRegistry"))
-        dependsOn(project("ok-marketplace-app-ktor").tasks.getByName("dockerBuild"))
+//        dependsOn(project("ok-marketplace-app-ktor").tasks.getByName("publishImageToLocalRegistry"))
+//        dependsOn(project("ok-marketplace-app-ktor").tasks.getByName("dockerBuild"))
+        dependsOn(project("ok-marketplace-app-ktor").tasks.getByName("dockerBuildJvm"))
     }
 }

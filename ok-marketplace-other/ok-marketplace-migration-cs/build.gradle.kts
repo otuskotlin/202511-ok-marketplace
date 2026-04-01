@@ -5,7 +5,8 @@ plugins {
 }
 
 docker {
-    imageName = project.name
+//    imageName = project.name
+    imageTag = "${project.version}"
     dockerFile = "src/main/docker/Dockerfile"
 }
 
@@ -30,7 +31,7 @@ val csContainer: ComposeContainer by lazy {
 
 tasks {
     val buildImages by creating {
-        dependsOn(dockerBuild)
+//        dependsOn(dockerBuild)
     }
 
     val cassandraDn by creating {

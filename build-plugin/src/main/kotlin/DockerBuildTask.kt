@@ -75,8 +75,12 @@ abstract class DockerBuildTask : DefaultTask() {
 
         command.add(buildContext.get())
 
+        logger.lifecycle("Executing command: ${command.joinToString(" ")}")
+        logger.lifecycle("Working dir: ${project.rootProject.layout.projectDirectory.asFile.absolutePath}")
+
         val outputStream = ByteArrayOutputStream()
-        val execResult = project.exec {
+        val injected = project.objects.newInstance(InjectedExecOps::class.java)
+        val execResult = injected.execOps.exec {
             commandLine(command)
             standardOutput = outputStream
             errorOutput = outputStream

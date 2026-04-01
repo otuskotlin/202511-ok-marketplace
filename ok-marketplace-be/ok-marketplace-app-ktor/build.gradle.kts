@@ -1,41 +1,40 @@
-import io.ktor.plugin.features.*
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import ru.otus.otuskotlin.marketplace.plugin.DockerBuildTask
 
 plugins {
     alias(libs.plugins.kotlinx.serialization)
     id("build-kmp")
-//    id("io.ktor.plugin")
-    alias(libs.plugins.ktor)
+    alias(libs.plugins.shadowJar)
     id("build-docker")
 }
 
-application {
-    mainClass.set("io.ktor.server.cio.EngineMain")
-}
+docker {
+    buildContext = "."
+    imageTag = "${project.version}"
 
-ktor {
-    configureNativeImage(project)
-    docker {
-        localImageName.set("${project.name}-jvm")
-        imageTag.set(project.version.toString())
-        jreVersion.set(JavaVersion.VERSION_21)
+    // JVM образ
+    images.register("Jvm") {
+        buildContext = project.layout.buildDirectory.dir("docker-jvm").get().toString()
+        dockerFile = "Dockerfile"
+        dependsOnTask = "jvmJar"
+    }
+
+    // Native образ для Linux x64
+    images.register("LinuxX64") {
+        buildContext = project.layout.buildDirectory.dir("docker-linuxx64").get().toString()
+        dockerFile = "Dockerfile"
+        dependsOnTask = "linkReleaseExecutableLinuxX64"
     }
 }
 
-jib {
-    container.mainClass = application.mainClass.get()
-}
-
-docker {
-    buildContext = project.layout.buildDirectory.dir("docker-x64").get().toString()
-    imageName = "${project.name}-x64"
-    dockerFile = "Dockerfile"
-    imageTag = "${project.version}"
-}
-
 kotlin {
-    // !!! Обязательно. Иначе не проходит сборка толстых джанриков в shadowJar
-    jvm { withJava() }
+    jvm {
+        mainRun {
+            mainClass = "io.ktor.server.cio.EngineMain"
+        }
+    }
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries {
             executable {
@@ -124,41 +123,55 @@ kotlin {
         }
 
         linuxX64Main {
+            dependencies {
+            }
         }
     }
 }
 
 tasks {
-    shadowJar {
-        isZip64 = true
-    }
-    distTar {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
-    distZip {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
-
     // Если ошибка: "Entry application.yaml is a duplicate but no duplicate handling strategy has been set."
     // Возникает из-за наличия файлов как в common, так и в jvm платформе
     withType(ProcessResources::class) {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
-    val linkReleaseExecutableLinuxX64 by getting(KotlinNativeLink::class)
-    val nativeFileX64 = linkReleaseExecutableLinuxX64.binary.outputFile
-    val linuxX64ProcessResources by getting(ProcessResources::class)
-    dockerBuild {
-        dependsOn(linkReleaseExecutableLinuxX64)
-        dependsOn(linuxX64ProcessResources)
-        group = "docker"
-        doFirst {
-            copy {
-                from("Dockerfile") //.rename { "Dockerfile" }
-                from(nativeFileX64)
-                from(linuxX64ProcessResources.destinationDir)
-                println("BUILD CONTEXT: ${buildContext.get()}")
-                into(buildContext)
+    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+        manifest {
+            // Optionally, set the main class for the shadowed JAR.
+            attributes["Main-Class"] = "io.ktor.server.cio.EngineMain"
+        }
+    }
+}
+
+afterEvaluate {
+    tasks {
+        named("dockerBuildJvm", DockerBuildTask::class) {
+            dependsOn(shadowJar)
+            group = "docker"
+            doFirst {
+                copy {
+                    from("Dockerfile.jvm") { rename { "Dockerfile" } }
+                    from(shadowJar.get().archiveFile.get())
+                    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+                    println("BUILD CONTEXT: ${buildContext.get()}")
+                    into(buildContext)
+                }
+            }
+        }
+
+        named("dockerBuildLinuxX64", DockerBuildTask::class) {
+            dependsOn("linkReleaseExecutableLinuxX64")
+            group = "docker"
+            doFirst {
+                copy {
+                    from("Dockerfile")
+                    from(getByName("linkReleaseExecutableLinuxX64").outputs)
+                    from(linuxX64ProcessResources.get().outputs)
+                    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+                    println("BUILD CONTEXT: ${buildContext.get()}")
+                    into(buildContext)
+                }
             }
         }
     }

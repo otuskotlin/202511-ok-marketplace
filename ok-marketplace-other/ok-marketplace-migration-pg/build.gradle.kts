@@ -5,7 +5,7 @@ plugins {
 }
 
 docker {
-    imageName = project.name
+//    imageName = project.name
     dockerFile = "src/main/docker/Dockerfile"
 }
 
@@ -33,7 +33,7 @@ val pgContainer: ComposeContainer by lazy {
 
 tasks {
     val buildImages by creating {
-        dependsOn(dockerBuild)
+//        dependsOn(dockerBuild)
     }
 
     val pgDn by creating {

@@ -1,11 +1,14 @@
 package ru.otus.otuskotlin.marketplace.plugin
 
+import org.gradle.api.provider.MapProperty
+
 open class DockerExtension {
-    var dockerFile = "Dockerfile"
-    var imageName = ""
-    var imageTag = "latest"
     var buildContext = "./"
-    var buildArgs: Map<String, String> = emptyMap()
+    var dockerFile = "Dockerfile"
+    var imageTag = "latest"
+    var buildArgs: MapProperty<String, String>? = null
     var noCache = false
     var removeIntermediateContainers = false
+
+    val images = DockerImagesExtension()
 }

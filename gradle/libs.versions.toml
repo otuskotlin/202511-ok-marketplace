@@ -1,9 +1,9 @@
 [versions]
-kotlin = "2.1.0"
+kotlin = "2.2.21"
 mkpl = "0.0.1"
 
 kotlinx-datetime = "0.6.2"
-kotlinx-serialization = "1.6.3"
+kotlinx-serialization = "1.8.1"
 coroutines = "1.9.0"
 
 binaryCompabilityValidator = "0.13.2"
@@ -16,17 +16,17 @@ kotest = "6.0.0.M2"
 kermit = "2.0.3"
 
 #Frameworks
-ktor = "2.3.12"
+ktor = "3.3.3"
 spring-boot = "3.4.0"
 
 # Docker
 muschko = "9.4.0"
 
 #Testing
-testcontainers = "1.21.1"
+testcontainers = "1.21.4"
 
 # BASE
-jvm-compiler = "17"
+jvm-compiler = "21"
 jvm-language = "21"
 
 [libraries]
@@ -63,6 +63,7 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 ktor-client-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
+ktor-server-tomcat-jakarta = { module = "io.ktor:ktor-server-tomcat-jakarta", version.ref = "ktor" }
 ktor-server-headers-response = { module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktor" }
 ktor-server-headers-caching = { module = "io.ktor:ktor-server-caching-headers", version.ref = "ktor" }
 ktor-server-headers-default = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
@@ -97,6 +98,8 @@ mkpl-logs-kermit = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplac
 mkpl-logs-logback = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-logback", version.ref = "mkpl" }
 mkpl-logs-socket = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-socket", version.ref = "mkpl" }
 mkpl-cor = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-cor", version.ref = "mkpl" }
+mkpl-state-common = { module = "ru.otus.otuskotlin.marketplace.state:ok-marketplace-states-common", version.ref = "mkpl" }
+mkpl-state-biz = { module = "ru.otus.otuskotlin.marketplace.state:ok-marketplace-states-biz", version.ref = "mkpl" }
 
 [bundles]
 kotest = ["kotest-junit5", "kotest-core", "kotest-property"]
@@ -105,9 +108,9 @@ kotest = ["kotest-junit5", "kotest-core", "kotest-property"]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 openapi-generator = { id = "org.openapi.generator", version.ref = "openapi-generator" }
-crowdproj-generator = { id = "com.crowdproj.generator", version = "0.3.0" }
+crowdproj-generator = { id = "com.crowdproj.generator", version = "0.4.0" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-shadowJar = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
+shadowJar = { id = "com.gradleup.shadow", version = "9.3.2" }
 
 # Spring
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
