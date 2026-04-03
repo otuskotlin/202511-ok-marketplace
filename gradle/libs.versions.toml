@@ -19,6 +19,8 @@ kermit = "2.0.3"
 ktor = "3.3.3"
 spring-boot = "4.0.5"
 
+liquibase = "4.27.0"
+
 # Docker
 muschko = "9.4.0"
 
@@ -41,8 +43,10 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "coroutines" }
 coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "coroutines" }
 cor = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-cor" }
+uuid = "com.benasher44:uuid:0.8.4"
 
-jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+#jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+jackson-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version = "3.1.1" }
 jackson-datatype = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 
@@ -62,7 +66,6 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 ktor-client-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
-ktor-server-tomcat-jakarta = { module = "io.ktor:ktor-server-tomcat-jakarta", version.ref = "ktor" }
 ktor-server-headers-response = { module = "io.ktor:ktor-server-auto-head-response", version.ref = "ktor" }
 ktor-server-headers-caching = { module = "io.ktor:ktor-server-caching-headers", version.ref = "ktor" }
 ktor-server-headers-default = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
@@ -76,12 +79,17 @@ ktor-server-test = { module = "io.ktor:ktor-server-test-host", version.ref = "kt
 # Spring
 spring-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
-spring-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version = "2.3.0" }
+spring-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version = "3.0.2" }
 spring-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-webflux-test = { module = "org.springframework.boot:spring-boot-webflux-test" }
+spring-mockk = "com.ninja-squad:springmockk:5.0.1"
 
 # Message Queues
 rabbitmq-client = { module = "com.rabbitmq:amqp-client", version = "5.20.0" }
 kafka-client = { module = "org.apache.kafka:kafka-clients", version = "3.7.0" }
+
+# Databases
+db-cache4k = "io.github.reactivecircus.cache4k:cache4k:0.13.0"
 
 # Testing
 kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
@@ -110,6 +118,7 @@ openapi-generator = { id = "org.openapi.generator", version.ref = "openapi-gener
 crowdproj-generator = { id = "com.crowdproj.generator", version = "0.4.0" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 shadowJar = { id = "com.gradleup.shadow", version = "9.3.2" }
+liquibase = { id = "org.liquibase.gradle", version = "2.2.2" }
 
 # Spring
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

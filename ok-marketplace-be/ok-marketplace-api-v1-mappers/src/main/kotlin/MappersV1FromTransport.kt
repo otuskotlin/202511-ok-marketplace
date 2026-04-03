@@ -24,6 +24,7 @@ import ru.otus.otuskotlin.marketplace.common.models.MkplAdId
 import ru.otus.otuskotlin.marketplace.common.models.MkplAdLock
 import ru.otus.otuskotlin.marketplace.common.models.MkplCommand
 import ru.otus.otuskotlin.marketplace.common.models.MkplDealSide
+import ru.otus.otuskotlin.marketplace.common.models.MkplUserId
 import ru.otus.otuskotlin.marketplace.common.models.MkplVisibility
 import ru.otus.otuskotlin.marketplace.common.models.MkplWorkMode
 import ru.otus.otuskotlin.marketplace.common.stubs.MkplStubs
@@ -120,7 +121,9 @@ fun MkplContext.fromTransport(request: AdOffersRequest) {
 }
 
 private fun AdSearchFilter?.toInternal(): MkplAdFilter = MkplAdFilter(
-    searchString = this?.searchString ?: ""
+    searchString = this?.searchString ?: "",
+    ownerId = this?.ownerId?.let { MkplUserId(it) } ?: MkplUserId.NONE,
+    dealSide = this?.adType.fromTransport(),
 )
 
 private fun AdCreateObject.toInternal(): MkplAd = MkplAd(

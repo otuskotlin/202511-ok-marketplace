@@ -28,6 +28,10 @@ pluginManagement {
 //implementation(projects.m2l5Gradle.sub1.ssub1)
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+// Включает вот такую конструкцию
+//implementation(projects.m2l5Gradle.sub1.ssub1)
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 include(":ok-marketplace-api-v1-jackson")
 include(":ok-marketplace-api-v1-mappers")
 include(":ok-marketplace-api-v2-kmp")
@@ -43,4 +47,10 @@ include(":ok-marketplace-app-spring")
 include(":ok-marketplace-app-ktor")
 include(":ok-marketplace-app-rabbit")
 include(":ok-marketplace-app-kafka")
+
+// DB
+include(":ok-marketplace-repo-common")
+include(":ok-marketplace-repo-inmemory")
+include(":ok-marketplace-repo-stubs")
+include(":ok-marketplace-repo-tests")
 
