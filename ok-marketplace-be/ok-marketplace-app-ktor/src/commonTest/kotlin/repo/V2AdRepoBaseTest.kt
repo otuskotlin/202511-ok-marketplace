@@ -26,7 +26,7 @@ import kotlin.test.assertNotEquals
 abstract class V2AdRepoBaseTest {
     abstract val workMode: AdRequestDebugMode
     abstract val appSettingsCreate: MkplAppSettings
-    abstract val appSettingsRead:   MkplAppSettings
+    abstract val appSettingsRead: MkplAppSettings
     abstract val appSettingsUpdate: MkplAppSettings
     abstract val appSettingsDelete: MkplAppSettings
     abstract val appSettingsSearch: MkplAppSettings
@@ -64,6 +64,7 @@ abstract class V2AdRepoBaseTest {
             assertEquals(ad.description, responseObj.ad?.description)
             assertEquals(ad.adType, responseObj.ad?.adType)
             assertEquals(ad.visibility, responseObj.ad?.visibility)
+            assertEquals(uuidNew, responseObj.ad?.lock)
         }
     }
 
@@ -104,6 +105,7 @@ abstract class V2AdRepoBaseTest {
             assertEquals(ad.visibility, responseObj.ad?.visibility)
         }
     }
+
     @Test
     fun delete() {
         val ad = initAd.toTransportDelete()
@@ -151,7 +153,7 @@ abstract class V2AdRepoBaseTest {
         assertEquals(uuidSup, responseObj.ads?.first()?.id)
     }
 
-    private inline fun <reified T: IRequest> v2TestApplication(
+    private inline fun <reified T : IRequest> v2TestApplication(
         conf: MkplAppSettings,
         func: String,
         request: T,
