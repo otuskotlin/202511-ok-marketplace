@@ -20,8 +20,6 @@ ktor = "3.3.3"
 spring-boot = "4.0.5"
 
 liquibase = "4.27.0"
-
-liquibase = "4.27.0"
 exposed = "0.50.0"
 
 # Docker
