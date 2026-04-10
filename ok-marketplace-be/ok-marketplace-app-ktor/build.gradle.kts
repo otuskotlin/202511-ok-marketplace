@@ -1,12 +1,11 @@
-@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
-
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import ru.otus.otuskotlin.marketplace.plugin.DockerBuildTask
+import io.ktor.plugin.features.*
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 plugins {
     alias(libs.plugins.kotlinx.serialization)
     id("build-kmp")
-    alias(libs.plugins.shadowJar)
+//    id("io.ktor.plugin")
+    alias(libs.plugins.ktor)
     id("build-docker")
 }
 
@@ -56,6 +55,10 @@ kotlin {
                 implementation(libs.ktor.server.headers.caching)
                 implementation(libs.ktor.server.websocket)
 
+//                // Для того, чтоб получать содержимое запроса более одного раза
+//                В Application.main добавить `install(DoubleReceive)`
+//                implementation("io.ktor:ktor-server-double-receive:${libs.versions.ktor.get()}")
+
                 implementation(project(":ok-marketplace-common"))
                 implementation(project(":ok-marketplace-app-common"))
                 implementation(project(":ok-marketplace-biz"))
@@ -65,12 +68,16 @@ kotlin {
 
                 // Stubs
                 implementation(project(":ok-marketplace-stubs"))
+                // RabbitMQ
+//                implementation(project(":ok-marketplace-app-rabbit"))
 
                 implementation(libs.kotlinx.serialization.core)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.ktor.serialization.json)
 
                 // DB
+                implementation(libs.uuid)
+                implementation(projects.okMarketplaceRepoCommon)
                 implementation(projects.okMarketplaceRepoStubs)
                 implementation(projects.okMarketplaceRepoInmemory)
 
@@ -113,6 +120,8 @@ kotlin {
                 implementation(projects.okMarketplaceApiV2Kmp)
 
                 implementation("ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-logback")
+                implementation(projects.okMarketplaceRepoPgjvm)
+                implementation(libs.testcontainers.postgres)
             }
         }
 
@@ -124,6 +133,7 @@ kotlin {
 
         linuxX64Main {
             dependencies {
+                implementation(projects.okMarketplaceRepoPgntv)
             }
         }
     }

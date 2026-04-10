@@ -20,6 +20,10 @@ ktor = "3.3.3"
 spring-boot = "4.0.5"
 
 liquibase = "4.27.0"
+exposed = "0.50.0"
+cassandra = "4.17.0"
+arcadedb = "25.9.1"
+gremlin = "3.7.4"
 
 # Docker
 muschko = "9.4.0"
@@ -32,6 +36,7 @@ jvm-compiler = "21"
 jvm-language = "21"
 
 [libraries]
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-binaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "binaryCompabilityValidator" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
@@ -42,6 +47,7 @@ coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", ve
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "coroutines" }
 coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive", version.ref = "coroutines" }
+coroutines-jdk9 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk9", version.ref = "coroutines" }
 cor = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-cor" }
 uuid = "com.benasher44:uuid:0.8.4"
 
@@ -90,6 +96,26 @@ kafka-client = { module = "org.apache.kafka:kafka-clients", version = "3.7.0" }
 
 # Databases
 db-cache4k = "io.github.reactivecircus.cache4k:cache4k:0.13.0"
+db-postgres = "org.postgresql:postgresql:42.7.3"
+db-hikari = "com.zaxxer:HikariCP:5.1.0"
+db-exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+db-exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+db-exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+db-cassandra-core = { module = "com.datastax.oss:java-driver-core", version.ref = "cassandra" }
+db-cassandra-qbuilder = { module = "com.datastax.oss:java-driver-query-builder", version.ref = "cassandra" }
+db-cassandra-kapt = { module = "com.datastax.oss:java-driver-mapper-processor", version.ref = "cassandra" }
+db-cassandra-mapper = { module = "com.datastax.oss:java-driver-mapper-runtime", version.ref = "cassandra" }
+
+# Gremlin
+gdb-gremlin-driver = { module = "org.apache.tinkerpop:gremlin-driver", version.ref = "gremlin" }
+gdb-arcade-engine = { module = "com.arcadedb:arcadedb-engine", version.ref = "arcadedb" }
+gdb-arcade-network = { module = "com.arcadedb:arcadedb-network", version.ref = "arcadedb" }
+gdb-arcade-gremlin = { module = "com.arcadedb:arcadedb-gremlin", version.ref = "arcadedb" }
+
+# Liquidbase
+liquibase-core = {module = "org.liquibase:liquibase-core", version.ref = "liquibase"}
+liquibase-picocli = "info.picocli:picocli:4.7.5"
+liquibase-snakeyml = "org.yaml:snakeyaml:1.33"
 
 # Testing
 kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
@@ -99,6 +125,8 @@ mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "5.2.
 
 testcontainers-core = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
 testcontainers-rabbitmq = { module = "org.testcontainers:rabbitmq", version.ref = "testcontainers" }
+testcontainers-postgres = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+testcontainers-cassandra = { module = "org.testcontainers:cassandra", version.ref = "testcontainers" }
 
 mkpl-logs-common = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-common", version.ref = "mkpl" }
 mkpl-logs-kermit = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-kermit", version.ref = "mkpl" }
@@ -108,7 +136,14 @@ mkpl-cor = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-co
 mkpl-state-common = { module = "ru.otus.otuskotlin.marketplace.state:ok-marketplace-states-common", version.ref = "mkpl" }
 mkpl-state-biz = { module = "ru.otus.otuskotlin.marketplace.state:ok-marketplace-states-biz", version.ref = "mkpl" }
 
+# Machine Learning
+ml-tokenizer = "ai.djl.huggingface:tokenizers:0.25.0"
+ml-onnx-runtime = "com.microsoft.onnxruntime:onnxruntime:1.16.3"
+
 [bundles]
+exposed = ["db-exposed-core", "db-exposed-dao", "db-exposed-jdbc"]
+cassandra = ["db-cassandra-core", "db-cassandra-mapper", "db-cassandra-qbuilder"]
+#kotest = ["kotest-junit5", "kotest-core", "kotest-datatest", "kotest-property"]
 kotest = ["kotest-junit5", "kotest-core", "kotest-property"]
 
 [plugins]
@@ -131,3 +166,4 @@ ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 # Docker
 muschko-remote = { id = "com.bmuschko.docker-remote-api", version.ref = "muschko" }
 muschko-java = { id = "com.bmuschko.docker-java-application", version.ref = "muschko" }
+palantir-docker = "com.palantir.docker:0.36.0"

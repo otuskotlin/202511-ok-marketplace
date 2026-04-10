@@ -53,4 +53,6 @@ include(":ok-marketplace-repo-common")
 include(":ok-marketplace-repo-inmemory")
 include(":ok-marketplace-repo-stubs")
 include(":ok-marketplace-repo-tests")
+include(":ok-marketplace-repo-pgjvm")
+include(":ok-marketplace-repo-pgntv")
 
