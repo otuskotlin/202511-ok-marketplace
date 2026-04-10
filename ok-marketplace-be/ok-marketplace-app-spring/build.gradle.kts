@@ -38,6 +38,7 @@ dependencies {
     // DB
     implementation(projects.okMarketplaceRepoStubs)
     implementation(projects.okMarketplaceRepoInmemory)
+    implementation(projects.okMarketplaceRepoPgjvm)
     testImplementation(projects.okMarketplaceRepoCommon)
     testImplementation(projects.okMarketplaceStubs)
 
@@ -67,4 +68,18 @@ tasks {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    environment("MKPLADS_DB", "test_db")
+}
+
+tasks.bootBuildImage {
+    builder = "paketobuildpacks/builder-jammy-base:latest"
+    environment.set(mapOf("BP_HEALTH_CHECKER_ENABLED" to "true"))
+    buildpacks.set(
+        listOf(
+            "docker.io/paketobuildpacks/adoptium",
+            "urn:cnb:builder:paketo-buildpacks/java",
+            "docker.io/paketobuildpacks/health-checker:latest"
+        )
+    )
+
 }

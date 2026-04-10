@@ -18,6 +18,7 @@ import ru.otus.otuskotlin.marketplace.common.MkplContext
 import ru.otus.otuskotlin.marketplace.common.exceptions.UnknownMkplCommand
 import ru.otus.otuskotlin.marketplace.common.models.MkplAd
 import ru.otus.otuskotlin.marketplace.common.models.MkplAdId
+import ru.otus.otuskotlin.marketplace.common.models.MkplAdLock
 import ru.otus.otuskotlin.marketplace.common.models.MkplAdPermissionClient
 import ru.otus.otuskotlin.marketplace.common.models.MkplCommand
 import ru.otus.otuskotlin.marketplace.common.models.MkplDealSide
@@ -75,7 +76,8 @@ fun MkplContext.toTransportSearch() = AdSearchResponse(
 fun MkplContext.toTransportOffers() = AdOffersResponse(
     result = state.toResult(),
     errors = errors.toTransportErrors(),
-    ads = adsResponse.toTransportAd()
+    ad = adResponse.toTransportAd(),
+    ads = adsResponse.toTransportAd(),
 )
 
 fun MkplContext.toTransportInit() = AdInitResponse(
@@ -96,6 +98,7 @@ fun MkplAd.toTransportAd(): AdResponseObject? = AdResponseObject(
     adType = adType.toTransportAd(),
     visibility = visibility.toTransportAd(),
     permissions = permissionsClient.toTransportAd(),
+    lock = lock.takeIf { it != MkplAdLock.NONE }?.asString()
 ).takeIf { ! this@toTransportAd.isEmpty() }
 
 internal fun MkplAdId.toTransportAd() = takeIf { it != MkplAdId.NONE }?.asString()

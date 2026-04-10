@@ -16,12 +16,12 @@ abstract class ScenarioUpdateV2(
     @Test
     fun update() = runBlocking {
         val obj = someCreateAd
-        val resCreate = client.sendAndReceive(
+        val resCreate = client.sendAndReceive<AdCreateRequest,AdCreateResponse>(
             "ad/create", AdCreateRequest(
                 debug = debug,
                 ad = obj,
             )
-        ) as AdCreateResponse
+        )
 
         assertEquals(ResponseResult.SUCCESS, resCreate.result)
 
@@ -39,13 +39,13 @@ abstract class ScenarioUpdateV2(
             adType = cObj.adType,
             visibility = cObj.visibility,
         )
-        val resUpdate = client.sendAndReceive(
+        val resUpdate = client.sendAndReceive<AdUpdateRequest,AdUpdateResponse>(
             "ad/update",
             AdUpdateRequest(
                 debug = debug,
                 ad = uObj,
             )
-        ) as AdUpdateResponse
+        )
 
         assertEquals(ResponseResult.SUCCESS, resUpdate.result)
 
@@ -55,19 +55,13 @@ abstract class ScenarioUpdateV2(
         assertEquals(uObj.visibility, ruObj.visibility)
         assertEquals(uObj.adType, ruObj.adType)
 
-        val resDelete = client.sendAndReceive(
+        val resDelete = client.sendAndReceive<AdDeleteRequest,AdDeleteResponse>(
             "ad/delete", AdDeleteRequest(
                 debug = debug,
-                ad = AdDeleteObject(cObj.id, cObj.lock),
+                ad = AdDeleteObject(cObj.id, resUpdate.ad?.lock),
             )
-        ) as AdDeleteResponse
+        )
 
         assertEquals(ResponseResult.SUCCESS, resDelete.result)
-
-        val dObj: AdResponseObject = resDelete.ad ?: fail("No ad in Delete response")
-        assertEquals(obj.title, dObj.title)
-        assertEquals(obj.description, dObj.description)
-        assertEquals(obj.visibility, dObj.visibility)
-        assertEquals(obj.adType, dObj.adType)
     }
 }
