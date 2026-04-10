@@ -23,17 +23,13 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     #    runs-on: macos-latest
-    permissions:
-      contents: read
-      packages: write
-
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.PAT_TOKEN }}
+      #        with:
+      #          submodules: recursive
+      #          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Restore cached Primes
         id: cache-primes-restore
@@ -50,39 +46,19 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      #      - name: Validate Gradle wrapper
-      #        uses: gradle/wrapper-validation-action@v1
+      - name: Setup Gradle from Properties File
+        uses: gradle/actions/setup-gradle@v5
 
-      #      # https://github.com/actions/runner-images/issues/675
-      #      - name: Hack sources.list
-      #        run: sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu/|http://mirror.arizona.edu/ubuntu/|g' /etc/apt/sources.list
-      #
-      #      - name: Install curl-dev
-      #        run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libpq-dev libpq5
+#      # https://github.com/actions/runner-images/issues/675
+#      - name: Hack sources.list
+#        run: sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu/|http://mirror.arizona.edu/ubuntu/|g' /etc/apt/sources.list
+#
+#      - name: Install curl-dev
+#        run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libpq-dev libpq5
 
-      - name: Build Migrations
-        env:
-          DOCKER_HOST: unix:///var/run/docker.sock
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: 8.14.1
-          arguments: buildMigrations --info
-      - name: Build Main Images
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: 8.14.1
-          arguments: buildImages --info
-      - name: Run E2E tests
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: 8.14.1
-          arguments: e2eTests --info
-
-      - name: Save Primes
-        id: cache-primes-save
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            .gradle
-            .kotlin
-          key: ${{ steps.cache-primes-restore.outputs.cache-primary-key }}
+      - name: Build Infrastructure
+        run: gradle buildInfra --info --build-cache
+#        - name: Build App Images
+#          run gradle buildImages --info --build-cache
+      - name: Run E2E Tests
+        run: gradle e2eTests --info --build-cache
