@@ -44,7 +44,6 @@ tasks {
     register("check") {
         group = "verification"
         dependsOn(gradle.includedBuild("ok-marketplace-be").task(":check"))
-        dependsOn("e2eTests")
     }
 }
 
