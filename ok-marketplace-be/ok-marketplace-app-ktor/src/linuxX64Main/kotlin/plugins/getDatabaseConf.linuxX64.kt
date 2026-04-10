@@ -3,9 +3,10 @@ package ru.otus.otuskotlin.marketplace.app.ktor.plugins
 import io.ktor.server.application.*
 import ru.otus.otuskotlin.marketplace.app.ktor.configs.ConfigPaths
 import ru.otus.otuskotlin.marketplace.app.ktor.configs.PostgresConfig
-import ru.otus.otuskotlin.marketplace.backend.repo.postgresql.RepoAdSql
-import ru.otus.otuskotlin.marketplace.backend.repo.postgresql.SqlProperties
+//import ru.otus.otuskotlin.marketplace.backend.repo.postgresql.RepoAdSql
+//import ru.otus.otuskotlin.marketplace.backend.repo.postgresql.SqlProperties
 import ru.otus.otuskotlin.marketplace.common.repo.IRepoAd
+import ru.otus.otuskotlin.marketplace.repo.inmemory.AdRepoInMemory
 
 actual fun Application.getDatabaseConf(type: AdDbType): IRepoAd {
     val dbSettingPath = "${ConfigPaths.repository}.${type.confName}"
@@ -22,14 +23,6 @@ actual fun Application.getDatabaseConf(type: AdDbType): IRepoAd {
 
 fun Application.initPostgres(): IRepoAd {
     val config = PostgresConfig(environment.config)
-    return RepoAdSql(
-        properties = SqlProperties(
-            host = config.host,
-            port = config.port,
-            user = config.user,
-            password = config.password,
-            schema = config.schema,
-            database = config.database,
-        ),
-    )
+    return AdRepoInMemory()
+
 }
