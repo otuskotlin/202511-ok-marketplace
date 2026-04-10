@@ -5,9 +5,16 @@ plugins {
 }
 
 docker {
-    imageName = project.name
-    imageTag = "${project.version}"
-    dockerFile = "src/main/docker/Dockerfile"
+    docker {
+        images.register("migration-cs") {
+            buildContext = project.layout.projectDirectory.toString()
+            name = "ok-marketplace11-migration-cs"
+            imageName = project.name
+            imageTag = "${project.version}"
+            dockerFile = "src/main/docker/Dockerfile"
+        }
+    }
+
 }
 
 buildscript {
@@ -31,7 +38,7 @@ val csContainer: ComposeContainer by lazy {
 
 tasks {
     val buildImages by creating {
-        dependsOn("build-docker")
+        dependsOn("dockerBuildmigrationcs")
     }
 
     val cassandraDn by creating {

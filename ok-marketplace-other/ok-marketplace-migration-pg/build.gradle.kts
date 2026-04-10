@@ -5,9 +5,12 @@ plugins {
 }
 
 docker {
-    imageName = project.name
-    imageTag = "${project.version}"
-    dockerFile = "src/main/docker/Dockerfile"
+    images.register("migration-pg") {
+        buildContext = project.layout.projectDirectory.toString()
+        name = "ok-marketplace11-migration-pg"
+        imageTag = "${project.version}"
+        dockerFile = "src/main/docker/Dockerfile"
+    }
 }
 
 buildscript {
@@ -34,7 +37,7 @@ val pgContainer: ComposeContainer by lazy {
 
 tasks {
     val buildImages by creating {
-        dependsOn("build-docker")
+        dependsOn("dockerBuildmigrationpg")
     }
 
     val pgDn by creating {
