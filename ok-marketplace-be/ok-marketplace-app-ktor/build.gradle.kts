@@ -11,14 +11,13 @@ plugins {
 }
 
 docker {
-    buildContext = "."
-    imageTag = "${project.version}"
-
     // JVM образ
     images.register("Jvm") {
         buildContext = project.layout.buildDirectory.dir("docker-jvm").get().toString()
         dockerFile = "Dockerfile"
         dependsOnTask = "jvmJar"
+        imageName = "${project.name}-jvm"
+        imageTag = "${project.version}"
     }
 
     // Native образ для Linux x64
@@ -26,6 +25,8 @@ docker {
         buildContext = project.layout.buildDirectory.dir("docker-linuxx64").get().toString()
         dockerFile = "Dockerfile"
         dependsOnTask = "linkReleaseExecutableLinuxX64"
+        imageName = "${project.name}-x64"
+        imageTag = "${project.version}"
     }
 }
 
@@ -173,6 +174,7 @@ afterEvaluate {
 
         named("dockerBuildLinuxX64", DockerBuildTask::class) {
             dependsOn("linkReleaseExecutableLinuxX64")
+            dependsOn("linuxX64ProcessResources")
             group = "docker"
             doFirst {
                 copy {

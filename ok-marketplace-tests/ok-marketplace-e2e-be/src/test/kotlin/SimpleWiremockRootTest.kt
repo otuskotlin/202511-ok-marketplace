@@ -10,7 +10,8 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import org.testcontainers.containers.DockerComposeContainer
+import org.testcontainers.containers.ComposeContainer
+import org.testcontainers.containers.wait.strategy.Wait
 import java.io.File
 
 private val log = Logger
@@ -35,12 +36,13 @@ class SimpleWiremockRootTest : StringSpec({
     afterSpec { stop() }
 }) {
     companion object {
-        private val service = "app-wiremock_1"
+        private val service = "app-wiremock"
         private val port = 8080
 
         private val compose by lazy {
-            DockerComposeContainer(File("docker-compose/docker-compose-wiremock.yml")).apply {
+            ComposeContainer(File("docker-compose/docker-compose-wiremock.yml")).apply {
                 withExposedService(service, port)
+                waitingFor(service, Wait.forHealthcheck())
             }
         }
 

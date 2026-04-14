@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.registering
 import org.testcontainers.containers.ComposeContainer
 
 plugins {
@@ -8,7 +9,7 @@ docker {
     docker {
         images.register("migration-cs") {
             buildContext = project.layout.projectDirectory.toString()
-            name = "ok-marketplace11-migration-cs"
+            this.imageName = "ok-marketplace-migration-cs"
             imageName = project.name
             imageTag = "${project.version}"
             dockerFile = "src/main/docker/Dockerfile"
@@ -37,11 +38,9 @@ val csContainer: ComposeContainer by lazy {
 }
 
 tasks {
-    val buildImages by creating {
-        dependsOn("dockerBuildmigrationcs")
-    }
+    val buildImages by registering { -> dependsOn("dockerBuildmigrationcs") }
 
-    val cassandraDn by creating {
+    val cassandraDn by registering { ->
         group = "db"
         doFirst {
             println("Stopping Cassandra...")
@@ -49,7 +48,7 @@ tasks {
             println("Cassandra stopped")
         }
     }
-    val cassandraUp by creating {
+    val cassandraUp by registering { ->
         group = "db"
         doFirst {
             println("Starting Cassandra...")

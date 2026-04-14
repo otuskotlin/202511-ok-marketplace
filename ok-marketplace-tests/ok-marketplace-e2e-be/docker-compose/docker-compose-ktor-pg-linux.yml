@@ -35,7 +35,7 @@ services:
       retries: 5
 
   liquibase:
-    image: "ok-marketplace-migration-pg:0.1.0"
+    image: "ok-marketplace-migration-pg:0.0.1"
     environment:
       LIQUIBASE_URL:
       LIQUIBASE_COMMAND_URL: jdbc:postgresql://psql:5432/marketplace_ads

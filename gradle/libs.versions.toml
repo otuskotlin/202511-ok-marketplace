@@ -26,7 +26,8 @@ exposed = "0.50.0"
 muschko = "9.4.0"
 
 #Testing
-testcontainers = "1.21.4"
+#testcontainers = "1.21.4"
+testcontainers = "2.0.4"
 
 # BASE
 jvm-compiler = "21"
@@ -109,8 +110,8 @@ kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest"
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version = "5.2.1" }
 
 testcontainers-core = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
-testcontainers-rabbitmq = { module = "org.testcontainers:rabbitmq", version.ref = "testcontainers" }
-testcontainers-postgres = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+testcontainers-rabbitmq = { module = "org.testcontainers:testcontainers-rabbitmq", version.ref = "testcontainers" }
+testcontainers-postgres = { module = "org.testcontainers:testcontainers-postgresql", version.ref = "testcontainers" }
 
 mkpl-logs-common = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-common", version.ref = "mkpl" }
 mkpl-logs-kermit = { module = "ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-kermit", version.ref = "mkpl" }
