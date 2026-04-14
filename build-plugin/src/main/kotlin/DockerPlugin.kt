@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
 
+@Suppress("unused")
 class DockerPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val extension = project.extensions.create("docker", DockerExtension::class.java)
@@ -25,6 +26,7 @@ class DockerPlugin : Plugin<Project> {
                 val suffix = dockerImageName.replace(Regex("[^A-Za-z0-9]+"), "")
 
                 val taskName = "dockerBuild$suffix"
+                val imgName = ext.imageName.takeIf { it?.isNotBlank() ?: false } ?: project.name
 
                 val taskProvider: TaskProvider<DockerBuildTask> = project.tasks.register(
                     taskName,
@@ -34,7 +36,7 @@ class DockerPlugin : Plugin<Project> {
                     description = "Builds Docker image: $dockerImageName"
 
                     dockerFile.set(ext.dockerFile)
-                    imageName.set("ok-marketplace-app-ktor-$dockerImageName".lowercase())
+                    imageName.set(imgName.lowercase())
                     imageTag.set(ext.imageTag)
                     buildContext.set(ext.buildContext)
                     noCache.set(ext.noCache)

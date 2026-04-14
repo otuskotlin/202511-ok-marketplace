@@ -1,7 +1,7 @@
 package ru.otus.otuskotlin.marketplace.plugin
 
 class DockerImageExtension {
-    var name: String? = null
+    var imageName: String? = null
     var buildContext = "./"
     var dockerFile = "Dockerfile"
     var imageTag = "latest"

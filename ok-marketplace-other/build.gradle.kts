@@ -7,7 +7,7 @@ plugins {
 //version = "0.1.0"
 
 group = "ru.otus.otuskotlin.marketplace"
-version = "1.0"
+version = "0.0.1"
 
 base {
     archivesName.set("dcompose")
@@ -28,5 +28,7 @@ tasks {
     register("buildInfra") {
         group = "build"
         dependsOn(project(":ok-marketplace-dcompose").getTasksByName("publish",false))
+        dependsOn(project(":ok-marketplace-migration-cs").getTasksByName("buildImages",false))
+        dependsOn(project(":ok-marketplace-migration-pg").getTasksByName("buildImages",false))
     }
 }

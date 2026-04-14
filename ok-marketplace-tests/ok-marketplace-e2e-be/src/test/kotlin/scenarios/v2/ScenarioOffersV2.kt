@@ -16,18 +16,18 @@ abstract class ScenarioOffersV2(
     private val debug: AdDebug? = null
 ) {
     @Test
-    fun search() = runBlocking {
+    fun offers() = runBlocking {
         val objs = listOf(
             someCreateAd,
             someCreateAd.copy(title = "Some Bolt", adType = DealSide.SUPPLY),
             someCreateAd.copy(title = "Some Bolt", adType = DealSide.DEMAND),
         ).map { obj ->
-            val resCreate = client.sendAndReceive(
+            val resCreate = client.sendAndReceive<AdCreateRequest, AdCreateResponse>(
                 "ad/create", AdCreateRequest(
                     debug = debug,
                     ad = obj,
                 )
-            ) as AdCreateResponse
+            )
 
             assertEquals(ResponseResult.SUCCESS, resCreate.result)
 
@@ -41,13 +41,13 @@ abstract class ScenarioOffersV2(
         val (_, oSupply, oDemand) = objs
 
         val sObj = AdReadObject(id = oSupply.id)
-        val resOffers = client.sendAndReceive(
+        val resOffers = client.sendAndReceive<AdOffersRequest, AdOffersResponse>(
             "ad/offers",
             AdOffersRequest(
                 debug = debug,
                 ad = sObj,
             )
-        ) as AdOffersResponse
+        )
 
         assertEquals(ResponseResult.SUCCESS, resOffers.result)
 
@@ -55,16 +55,15 @@ abstract class ScenarioOffersV2(
         println(rsObj)
         assertTrue { rsObj.map { it.adType }.all { it == oDemand.adType } }
         val titles = rsObj.map { it.title }
-        assertContains(titles, "Selling Bolt")
-        assertContains(titles, "Selling Nut")
+        assertContains(titles, "Some Bolt")
 
         objs.forEach { obj ->
-            val resDelete = client.sendAndReceive(
+            val resDelete = client.sendAndReceive<AdDeleteRequest, AdDeleteResponse>(
                 "ad/delete", AdDeleteRequest(
                     debug = debug,
                     ad = AdDeleteObject(obj.id, obj.lock),
                 )
-            ) as AdDeleteResponse
+            )
 
             assertEquals(ResponseResult.SUCCESS, resDelete.result)
         }

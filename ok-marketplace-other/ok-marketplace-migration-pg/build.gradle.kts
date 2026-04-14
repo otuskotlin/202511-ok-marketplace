@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.registering
 import org.testcontainers.containers.ComposeContainer
 
 plugins {
@@ -5,9 +6,12 @@ plugins {
 }
 
 docker {
-    imageName = project.name
-    imageTag = "${project.version}"
-    dockerFile = "src/main/docker/Dockerfile"
+    images.register("migration-pg") {
+        buildContext = project.layout.projectDirectory.toString()
+        this.imageName = "ok-marketplace-migration-pg"
+        imageTag = "${project.version}"
+        dockerFile = "src/main/docker/Dockerfile"
+    }
 }
 
 buildscript {
@@ -33,11 +37,9 @@ val pgContainer: ComposeContainer by lazy {
 }
 
 tasks {
-    val buildImages by creating {
-        dependsOn("build-docker")
-    }
+    val buildImages by registering { -> dependsOn("dockerBuildmigrationpg") }
 
-    val pgDn by creating {
+    val pgDn by registering { ->
         group = "db"
         doFirst {
             println("Stopping PostgreSQL...")
@@ -45,7 +47,7 @@ tasks {
             println("PostgreSQL stopped")
         }
     }
-    val pgUp by creating {
+    val pgUp by registering { ->
         group = "db"
         doFirst {
             println("Starting PostgreSQL...")

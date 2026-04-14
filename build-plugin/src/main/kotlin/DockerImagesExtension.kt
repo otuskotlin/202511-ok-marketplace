@@ -9,7 +9,7 @@ class DockerImagesExtension {
         val ext = DockerImageExtension()
         println("Registering image: $name")
         configure(ext)
-        println("Registered image: $name with ext: ${ext.name}")
+        println("Registered image: $name with ext: ${ext.imageName}")
         _images[name] = ext
         println("Added to map: $name - total: ${_images.size}")
         return ext

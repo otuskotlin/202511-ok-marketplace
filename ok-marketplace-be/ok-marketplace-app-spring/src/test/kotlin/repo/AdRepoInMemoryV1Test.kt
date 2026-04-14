@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.webflux.test.autoconfigure.WebFluxTest
+import org.springframework.context.annotation.Import
 import org.springframework.test.web.reactive.server.WebTestClient
 import ru.otus.otuskotlin.markeplace.app.spring.config.AdConfig
 import ru.otus.otuskotlin.markeplace.app.spring.controllers.AdControllerV1Fine

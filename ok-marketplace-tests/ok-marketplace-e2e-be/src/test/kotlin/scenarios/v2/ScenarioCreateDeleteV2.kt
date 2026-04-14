@@ -16,12 +16,12 @@ abstract class ScenarioCreateDeleteV2(
     @Test
     fun createDelete() = runBlocking {
         val obj = someCreateAd
-        val resCreate = client.sendAndReceive(
+        val resCreate = client.sendAndReceive<AdCreateRequest, AdCreateResponse>(
             "ad/create", AdCreateRequest(
                 debug = debug,
                 ad = obj,
             )
-        ) as AdCreateResponse
+        )
 
         assertEquals(ResponseResult.SUCCESS, resCreate.result)
 
@@ -31,12 +31,12 @@ abstract class ScenarioCreateDeleteV2(
         assertEquals(obj.visibility, cObj.visibility)
         assertEquals(obj.adType, cObj.adType)
 
-        val resDelete = client.sendAndReceive(
+        val resDelete = client.sendAndReceive<AdDeleteRequest, AdDeleteResponse>(
             "ad/delete", AdDeleteRequest(
                 debug = debug,
                 ad = AdDeleteObject(cObj.id, cObj.lock),
             )
-        ) as AdDeleteResponse
+        )
 
         assertEquals(ResponseResult.SUCCESS, resDelete.result)
 
