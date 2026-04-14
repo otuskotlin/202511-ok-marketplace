@@ -51,3 +51,9 @@ marketplace:
       port: "$MKPLADS_PORT:5432"
       user: "$MKPLADS_USER:postgres"
       password: "$MKPLADS_PASS:marketplace-pass"
+    cassandra:
+      keyspace: "$MKPLADS_KEYSPACE:marketplace-ads"
+      host: "$MKPLADS_HOST:localhost"
+      port: "$MKPLADS_PORT:9042"
+      user: "$MKPLADS_USER:cassandra"
+      pass: "$MKPLADS_PASS:cassandra"
