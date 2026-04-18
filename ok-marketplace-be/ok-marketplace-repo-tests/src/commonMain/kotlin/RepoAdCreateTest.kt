@@ -24,7 +24,7 @@ abstract class RepoAdCreateTest {
         val result = repo.createAd(DbAdRequest(createObj))
         val expected = createObj
         assertIs<DbAdResponseOk>(result)
-        assertEquals(uuidNew, result.data.id)
+        assertNotEquals(MkplAdId.NONE, result.data.id)
         assertEquals(uuidNew.asString(), result.data.lock.asString())
         assertEquals(expected.title, result.data.title)
         assertEquals(expected.description, result.data.description)

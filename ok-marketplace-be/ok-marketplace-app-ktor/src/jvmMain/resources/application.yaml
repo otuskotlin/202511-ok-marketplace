@@ -57,3 +57,9 @@ marketplace:
       port: "$MKPLADS_PORT:9042"
       user: "$MKPLADS_USER:cassandra"
       pass: "$MKPLADS_PASS:cassandra"
+    gremlin:
+      host: "$DB_GREMLIN_HOST:localhost"
+      user: "$DB_GREMLIN_USER:root"
+      password: "$DB_GREMLIN_PASS:root_root"
+      port: "$DB_GREMLIN_PORT:8182"
+      enableSsl: false

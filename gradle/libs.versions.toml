@@ -22,6 +22,9 @@ spring-boot = "4.0.5"
 liquibase = "4.27.0"
 exposed = "0.50.0"
 cassandra = "4.17.0"
+#arcadedb = "25.9.1"
+arcadedb = "26.3.2"
+gremlin = "3.8.0"
 
 # Docker
 muschko = "9.4.0"
@@ -35,6 +38,7 @@ jvm-compiler = "21"
 jvm-language = "21"
 
 [libraries]
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-binaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "binaryCompabilityValidator" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
@@ -102,6 +106,12 @@ db-cassandra-core = { module = "com.datastax.oss:java-driver-core", version.ref 
 db-cassandra-qbuilder = { module = "com.datastax.oss:java-driver-query-builder", version.ref = "cassandra" }
 db-cassandra-kapt = { module = "com.datastax.oss:java-driver-mapper-processor", version.ref = "cassandra" }
 db-cassandra-mapper = { module = "com.datastax.oss:java-driver-mapper-runtime", version.ref = "cassandra" }
+
+# Gremlin
+gdb-gremlin-driver = { module = "org.apache.tinkerpop:gremlin-driver", version.ref = "gremlin" }
+gdb-arcade-engine = { module = "com.arcadedb:arcadedb-engine", version.ref = "arcadedb" }
+gdb-arcade-network = { module = "com.arcadedb:arcadedb-network", version.ref = "arcadedb" }
+gdb-arcade-gremlin = { module = "com.arcadedb:arcadedb-gremlin", version.ref = "arcadedb" }
 
 # Liquidbase
 liquibase-core = {module = "org.liquibase:liquibase-core", version.ref = "liquibase"}
