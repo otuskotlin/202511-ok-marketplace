@@ -150,11 +150,20 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
+
     named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+        isZip64 = true
         manifest {
             // Optionally, set the main class for the shadowed JAR.
             attributes["Main-Class"] = "io.ktor.server.cio.EngineMain"
         }
+        dependencies {
+            exclude(dependency("org.graalvm.js:js:.*"))
+            exclude(dependency("org.graalvm.polyglot:js:.*"))
+        }
+        // Исключаем проблемные файлы из упаковки
+        exclude("**/*.pom")
+        exclude("**/*.module")
     }
 }
 

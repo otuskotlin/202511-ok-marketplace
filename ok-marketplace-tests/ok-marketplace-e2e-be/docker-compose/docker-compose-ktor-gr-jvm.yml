@@ -20,7 +20,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080/"]
 
   arcadedb:
-    image: "arcadedata/arcadedb:25.9.1"
+    image: "arcadedata/arcadedb:26.3.2"
       #    ports:
       #      - "2480:2480"
       #      - "2424:2424"

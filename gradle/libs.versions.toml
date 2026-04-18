@@ -22,8 +22,9 @@ spring-boot = "4.0.5"
 liquibase = "4.27.0"
 exposed = "0.50.0"
 cassandra = "4.17.0"
-arcadedb = "25.9.1"
-gremlin = "3.7.4"
+#arcadedb = "25.9.1"
+arcadedb = "26.3.2"
+gremlin = "3.8.0"
 
 # Docker
 muschko = "9.4.0"

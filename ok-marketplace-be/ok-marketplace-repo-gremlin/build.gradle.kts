@@ -29,7 +29,7 @@ dependencies {
     testImplementation(projects.okMarketplaceRepoTests)
 }
 
-val arcadeDbVersion: String by project
+val arcadeDbVersion: String = libs.versions.arcadedb.get()
 
 tasks {
     val gradleConstants by creating {

@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   arcadedb:
-    image: "arcadedata/arcadedb:25.9.1"
+    image: "arcadedata/arcadedb:26.3.2"
     ports:
       - "2480:2480"
       - "2424:2424"
@@ -15,7 +15,7 @@ services:
         -Darcadedb.server.rootPassword=root_root
         -Darcadedb.server.plugins=GremlinServer:com.arcadedb.server.gremlin.GremlinServerPlugin
     healthcheck:
-      test: [ "CMD-SHELL", "curl --fail http://localhost:2480/api/v1/ready" ]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:2480/api/v1/ready || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
