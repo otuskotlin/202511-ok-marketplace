@@ -5,14 +5,15 @@ plugins {
 
 kotlin {
     sourceSets {
-        val coroutinesVersion: String by project
         commonMain {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
                 api("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
                 implementation(libs.kotlinx.serialization.core)
                 implementation(libs.kotlinx.serialization.json)
+                implementation(libs.coroutines.core)
                 api("ru.otus.otuskotlin.marketplace.libs:ok-marketplace-lib-logging-common")
+                api(libs.mkpl.state.common)
             }
         }
         commonTest {

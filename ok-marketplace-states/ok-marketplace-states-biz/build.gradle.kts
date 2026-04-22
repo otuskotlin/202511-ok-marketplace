@@ -11,10 +11,9 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
 
                 implementation(libs.mkpl.cor)
-                implementation(libs.mkpl.state.common)
+                implementation(libs.coroutines.core)
 
-                implementation(project(":ok-marketplace-common"))
-                implementation(project(":ok-marketplace-stubs"))
+                implementation(projects.okMarketplaceStatesCommon)
             }
         }
         commonTest {
@@ -23,8 +22,6 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
 
                 api(libs.coroutines.test)
-                implementation(projects.okMarketplaceRepoTests)
-                implementation(projects.okMarketplaceRepoInmemory)
             }
         }
         jvmMain {
