@@ -9,10 +9,12 @@ import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
 import ru.otus.otuskotlin.marketplace.api.v1.models.*
 import ru.otus.otuskotlin.marketplace.app.ktor.MkplAppSettings
+import ru.otus.otuskotlin.marketplace.app.ktor.auth.addAuth
 import ru.otus.otuskotlin.marketplace.app.ktor.moduleJvm
 import ru.otus.otuskotlin.marketplace.common.models.MkplAdId
 import ru.otus.otuskotlin.marketplace.common.models.MkplAdLock
 import ru.otus.otuskotlin.marketplace.common.models.MkplDealSide
+import ru.otus.otuskotlin.marketplace.common.permissions.MkplUserGroups
 import ru.otus.otuskotlin.marketplace.mappers.v1.toTransportCreate
 import ru.otus.otuskotlin.marketplace.mappers.v1.toTransportDelete
 import ru.otus.otuskotlin.marketplace.mappers.v1.toTransportRead
@@ -131,6 +133,7 @@ abstract class V1AdRepoBaseTest {
         val responseObj = response.body<AdSearchResponse>()
         assertEquals(200, response.status.value)
         assertNotEquals(0, responseObj.ads?.size)
+        println("SEARCH!!!: ${responseObj.ads}")
         assertEquals(uuidOld, responseObj.ads?.first()?.id)
     }
 
@@ -164,6 +167,7 @@ abstract class V1AdRepoBaseTest {
         val response = client.post("/v1/ad/$func") {
             contentType(ContentType.Application.Json)
             header("X-Trace-Id", "12345")
+            addAuth(groups = listOf(MkplUserGroups.USER))
             setBody(request)
         }
         function(response)

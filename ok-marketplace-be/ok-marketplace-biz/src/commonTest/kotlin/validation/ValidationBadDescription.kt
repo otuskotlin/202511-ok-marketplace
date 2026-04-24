@@ -2,6 +2,7 @@ package ru.otus.otuskotlin.marketplace.biz.validation
 
 import kotlinx.coroutines.test.runTest
 import ru.otus.otuskotlin.marketplace.biz.MkplAdProcessor
+import ru.otus.otuskotlin.marketplace.biz.addTestPrincipal
 import ru.otus.otuskotlin.marketplace.common.MkplContext
 import ru.otus.otuskotlin.marketplace.common.models.*
 import ru.otus.otuskotlin.marketplace.stubs.MkplAdStub
@@ -16,6 +17,7 @@ fun validationDescriptionCorrect(command: MkplCommand, processor: MkplAdProcesso
         workMode = MkplWorkMode.TEST,
         adRequest = MkplAdStub.get(),
     )
+    ctx.addTestPrincipal()
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(MkplState.FAILING, ctx.state)
@@ -31,6 +33,7 @@ fun validationDescriptionTrim(command: MkplCommand, processor: MkplAdProcessor) 
             description = " \n\tabc \n\t"
         },
     )
+    ctx.addTestPrincipal()
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(MkplState.FAILING, ctx.state)
@@ -46,6 +49,7 @@ fun validationDescriptionEmpty(command: MkplCommand, processor: MkplAdProcessor)
             description = ""
         },
     )
+    ctx.addTestPrincipal()
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(MkplState.FAILING, ctx.state)
@@ -63,6 +67,7 @@ fun validationDescriptionSymbols(command: MkplCommand, processor: MkplAdProcesso
             description = "!@#$%^&*(),.{}"
         },
     )
+    ctx.addTestPrincipal()
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(MkplState.FAILING, ctx.state)

@@ -7,6 +7,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.testing.*
+import kotlinx.coroutines.test.TestResult
 import ru.otus.otuskotlin.marketplace.api.v2.apiV2Mapper
 import ru.otus.otuskotlin.marketplace.api.v2.mappers.toTransportCreate
 import ru.otus.otuskotlin.marketplace.api.v2.mappers.toTransportDelete
@@ -14,10 +15,12 @@ import ru.otus.otuskotlin.marketplace.api.v2.mappers.toTransportRead
 import ru.otus.otuskotlin.marketplace.api.v2.mappers.toTransportUpdate
 import ru.otus.otuskotlin.marketplace.api.v2.models.*
 import ru.otus.otuskotlin.marketplace.app.ktor.MkplAppSettings
+import ru.otus.otuskotlin.marketplace.app.ktor.auth.addAuth
 import ru.otus.otuskotlin.marketplace.app.ktor.module
 import ru.otus.otuskotlin.marketplace.common.models.MkplAdId
 import ru.otus.otuskotlin.marketplace.common.models.MkplAdLock
 import ru.otus.otuskotlin.marketplace.common.models.MkplDealSide
+import ru.otus.otuskotlin.marketplace.common.permissions.MkplUserGroups
 import ru.otus.otuskotlin.marketplace.stubs.MkplAdStub
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -158,7 +161,7 @@ abstract class V2AdRepoBaseTest {
         func: String,
         request: T,
         crossinline function: suspend (HttpResponse) -> Unit,
-    ): Unit = testApplication {
+    ) = testApplication {
         application { module(appSettings = conf) }
         val client = createClient {
             install(ContentNegotiation) {
@@ -168,6 +171,7 @@ abstract class V2AdRepoBaseTest {
         val response = client.post("/v2/ad/$func") {
             contentType(ContentType.Application.Json)
             header("X-Trace-Id", "12345")
+            addAuth(groups = listOf(MkplUserGroups.USER))
             setBody(request)
         }
         function(response)

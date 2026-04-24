@@ -1,13 +1,9 @@
 package ru.otus.otuskotlin.marketplace.common
 
 import kotlinx.datetime.Instant
-import ru.otus.otuskotlin.marketplace.common.models.MkplAd
-import ru.otus.otuskotlin.marketplace.common.models.MkplAdFilter
-import ru.otus.otuskotlin.marketplace.common.models.MkplCommand
-import ru.otus.otuskotlin.marketplace.common.models.MkplError
-import ru.otus.otuskotlin.marketplace.common.models.MkplRequestId
-import ru.otus.otuskotlin.marketplace.common.models.MkplState
-import ru.otus.otuskotlin.marketplace.common.models.MkplWorkMode
+import ru.otus.otuskotlin.marketplace.common.models.*
+import ru.otus.otuskotlin.marketplace.common.permissions.MkplPrincipalModel
+import ru.otus.otuskotlin.marketplace.common.permissions.MkplUserPermissions
 import ru.otus.otuskotlin.marketplace.common.repo.IRepoAd
 import ru.otus.otuskotlin.marketplace.common.stubs.MkplStubs
 import ru.otus.otuskotlin.marketplace.common.ws.IMkplWsSession
@@ -22,6 +18,10 @@ data class MkplContext(
     var workMode: MkplWorkMode = MkplWorkMode.PROD,
     var stubCase: MkplStubs = MkplStubs.NONE,
     var wsSession: IMkplWsSession = IMkplWsSession.NONE,
+
+    var principal: MkplPrincipalModel = MkplPrincipalModel.NONE,
+    val permissionsChain: MutableSet<MkplUserPermissions> = mutableSetOf(),
+    var permitted: Boolean = false,
 
     var requestId: MkplRequestId = MkplRequestId.NONE,
     var timeStart: Instant = Instant.NONE,

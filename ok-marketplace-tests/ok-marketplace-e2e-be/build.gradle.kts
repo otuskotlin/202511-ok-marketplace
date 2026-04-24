@@ -1,12 +1,12 @@
 plugins {
     id("build-jvm")
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 repositories {
     maven {
         name = "LocalRepo"
         url = uri("${rootProject.projectDir}/../ok-marketplace-other/build/repo")
-//        url = uri("${rootProject.projectDir}/../ok-marketplace-other/ok-marketplace-dcompose/build/")
     }
 }
 
@@ -34,6 +34,8 @@ dependencies {
 
     testImplementation(libs.ktor.client.core)
     testImplementation(libs.ktor.client.okhttp)
+    testImplementation(libs.kotlinx.serialization.core)
+    testImplementation(libs.kotlinx.serialization.json)
 }
 
 var severity: String = "MINOR"

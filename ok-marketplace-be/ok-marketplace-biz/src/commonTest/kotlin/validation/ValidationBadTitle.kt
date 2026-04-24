@@ -2,6 +2,7 @@ package ru.otus.otuskotlin.marketplace.biz.validation
 
 import kotlinx.coroutines.test.runTest
 import ru.otus.otuskotlin.marketplace.biz.MkplAdProcessor
+import ru.otus.otuskotlin.marketplace.biz.addTestPrincipal
 import ru.otus.otuskotlin.marketplace.common.MkplContext
 import ru.otus.otuskotlin.marketplace.common.models.*
 import ru.otus.otuskotlin.marketplace.stubs.MkplAdStub
@@ -18,6 +19,7 @@ fun validationTitleCorrect(command: MkplCommand, processor: MkplAdProcessor) = r
             title = "abc"
         },
     )
+    ctx.addTestPrincipal()
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(MkplState.FAILING, ctx.state)
@@ -33,6 +35,7 @@ fun validationTitleTrim(command: MkplCommand, processor: MkplAdProcessor) = runT
             title = " \n\t abc \t\n "
         },
     )
+    ctx.addTestPrincipal()
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(MkplState.FAILING, ctx.state)
@@ -48,6 +51,7 @@ fun validationTitleEmpty(command: MkplCommand, processor: MkplAdProcessor) = run
             title = ""
         },
     )
+    ctx.addTestPrincipal()
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(MkplState.FAILING, ctx.state)
@@ -65,6 +69,7 @@ fun validationTitleSymbols(command: MkplCommand, processor: MkplAdProcessor) = r
             title = "!@#$%^&*(),.{}"
         },
     )
+    ctx.addTestPrincipal()
     processor.exec(ctx)
     assertEquals(1, ctx.errors.size)
     assertEquals(MkplState.FAILING, ctx.state)
